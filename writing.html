@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Writing - Ng Ying Xuan</title>
+    <meta
+      name="description"
+      content="Writing about learning, travel, tiny ideas, and the parts of a CS life that do not fit neatly inside a portfolio."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Lora:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header" data-site-header>
+      <div class="container header-inner">
+        <a class="brand" href="index.html">Ng Ying Xuan</a>
+        <button
+          class="menu-toggle"
+          type="button"
+          data-menu-toggle
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <nav class="site-nav" data-menu aria-label="Primary navigation">
+          <a href="index.html">home</a>
+          <a href="work.html">work</a>
+          <a class="active" href="writing.html">writing</a>
+          <a href="places.html">places</a>
+          <a href="about.html">about</a>
+          <a href="now.html">now</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-intro">
+        <div class="container">
+          <span class="eyebrow">writing</span>
+          <h1>Thoughts on learning, places, and whatever keeps returning to mind.</h1>
+          <p class="subcopy">
+            Some posts here are placeholders for future writing, but the shape is the
+            one I want to keep: room for technical notes, quieter reflections, and
+            the kinds of things that do not belong inside a resume bullet.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="filter-tabs" data-filter-controls="writing-archive" aria-label="Filter posts">
+            <button class="filter-tab is-active" type="button" data-filter="all" aria-pressed="true">
+              all
+            </button>
+            <button class="filter-tab" type="button" data-filter="learning" aria-pressed="false">
+              learning
+            </button>
+            <button class="filter-tab" type="button" data-filter="journal" aria-pressed="false">
+              journal
+            </button>
+            <button class="filter-tab" type="button" data-filter="ideas" aria-pressed="false">
+              ideas
+            </button>
+            <button class="filter-tab" type="button" data-filter="places" aria-pressed="false">
+              places
+            </button>
+          </div>
+
+          <ol class="post-list" data-filter-list="writing-archive">
+            <li class="post-row" data-category="learning ideas">
+              <div class="post-row-text">
+                <span class="tag">learning</span>
+                <h2 class="post-row-title">
+                  <a href="posts/quiet-systems/index.html"
+                    >What a Hackathon Weekend Taught Me About Quiet Systems</a
+                  >
+                </h2>
+                <p class="post-row-excerpt">
+                  A short reflection on designing for clarity when time is tight and
+                  every team member already has too much in their head.
+                </p>
+                <p class="meta">May 10, 2026</p>
+              </div>
+              <div class="post-row-image">
+                <img
+                  src="images/editorial-cover.svg"
+                  alt="Abstract editorial placeholder artwork in warm neutral tones"
+                />
+              </div>
+            </li>
+
+            <li class="post-row" data-category="journal learning">
+              <div class="post-row-text">
+                <span class="tag">journal</span>
+                <h2 class="post-row-title">
+                  <a href="posts/study-habits/index.html"
+                    >A Friday Spent Rewriting My Study Habits</a
+                  >
+                </h2>
+                <p class="post-row-excerpt">
+                  Slower mornings, fewer tabs, and a desk setup that helped me study
+                  without feeling like I was always catching up.
+                </p>
+                <p class="meta">April 28, 2026</p>
+              </div>
+              <div class="post-row-image">
+                <img
+                  src="images/editorial-cover.svg"
+                  alt="Abstract journal placeholder artwork with a paper-like texture"
+                />
+              </div>
+            </li>
+
+            <li class="post-row" data-category="ideas learning">
+              <div class="post-row-text">
+                <span class="tag">ideas</span>
+                <h2 class="post-row-title">
+                  <a href="posts/tiny-tools/index.html"
+                    >Why I Keep Making Tiny Tools for Myself</a
+                  >
+                </h2>
+                <p class="post-row-excerpt">
+                  Not every useful project needs users, branding, or a launch plan.
+                  Some of them just need to remove one bit of friction from a week.
+                </p>
+                <p class="meta">April 13, 2026</p>
+              </div>
+              <div class="post-row-image">
+                <img
+                  src="images/project-screen.svg"
+                  alt="Abstract tool interface placeholder with soft panels"
+                />
+              </div>
+            </li>
+
+            <li class="post-row" data-category="places journal">
+              <div class="post-row-text">
+                <span class="tag">places</span>
+                <h2 class="post-row-title">
+                  <a href="posts/three-evenings-in-kyoto/index.html">Three Evenings in Kyoto</a>
+                </h2>
+                <p class="post-row-excerpt">
+                  A travel note about quiet streets, ordinary meals, and the relief of
+                  moving through a city without needing to hurry.
+                </p>
+                <p class="meta">March 22, 2026</p>
+              </div>
+              <div class="post-row-image">
+                <img
+                  src="images/place-garden.svg"
+                  alt="Abstract travel placeholder artwork with a path and trees"
+                />
+              </div>
+            </li>
+
+            <li class="post-row" data-category="learning">
+              <div class="post-row-text">
+                <span class="tag">learning</span>
+                <h2 class="post-row-title">
+                  <a href="posts/study-habits/index.html"
+                    >Keeping Notes That Still Make Sense Three Weeks Later</a
+                  >
+                </h2>
+                <p class="post-row-excerpt">
+                  A small system for writing technical notes that stay readable when I
+                  come back to them during revision season.
+                </p>
+                <p class="meta">February 16, 2026</p>
+              </div>
+              <div class="post-row-image">
+                <img
+                  src="images/project-screen.svg"
+                  alt="Abstract notebook placeholder artwork with cards and columns"
+                />
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+    </main>
+
+    <section class="now-strip" aria-label="Right now">
+      <div class="container now-strip-inner">
+        <p class="now-strip-copy">
+          <span class="now-dot" aria-hidden="true"></span>
+          <span class="label">right now</span>
+          <span>
+            building out this site, keeping up with coding challenges, and making
+            time for badminton and piano.
+          </span>
+        </p>
+        <a class="subtle-link" href="now.html">full /now &rarr;</a>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>Ng Ying Xuan &copy; 2026</p>
+        <div class="footer-links">
+          <a href="https://github.com/bngybongybrd" target="_blank" rel="noreferrer">github</a>
+          <a href="mailto:ng.y1n9.xuan@gmail.com">email</a>
+          <a href="https://www.linkedin.com/in/ng-ying-xuan-856186271/" target="_blank" rel="noreferrer"
+            >linkedin</a
+          >
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

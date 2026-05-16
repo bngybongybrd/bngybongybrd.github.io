@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Places - Ng Ying Xuan</title>
+    <meta
+      name="description"
+      content="Places visited, what they felt like, and a small archive of travel memories."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Lora:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header" data-site-header>
+      <div class="container header-inner">
+        <a class="brand" href="index.html">Ng Ying Xuan</a>
+        <button
+          class="menu-toggle"
+          type="button"
+          data-menu-toggle
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <nav class="site-nav" data-menu aria-label="Primary navigation">
+          <a href="index.html">home</a>
+          <a href="work.html">work</a>
+          <a href="writing.html">writing</a>
+          <a class="active" href="places.html">places</a>
+          <a href="about.html">about</a>
+          <a href="now.html">now</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-intro">
+        <div class="container">
+          <span class="eyebrow">places</span>
+          <h1>Places I've been and what they felt like.</h1>
+          <p class="subcopy">
+            This page is photo-forward by design, but it still works with placeholder
+            artwork until your own travel images are ready. There is space to add an
+            interactive map later without reshaping the rest of the layout.
+          </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="future-note">
+            <span class="eyebrow">future map</span>
+            <p class="muted-copy">
+              A map will eventually gather these trips in one view. For now, the
+              archive stays simple and photo-first.
+            </p>
+          </div>
+
+          <div class="places-grid">
+            <article class="card place-card" id="kyoto">
+              <div class="card-media">
+                <img
+                  src="images/place-garden.svg"
+                  alt="Abstract Kyoto-inspired placeholder artwork with a garden path"
+                />
+              </div>
+              <div class="card-body">
+                <span class="tag">Japan &middot; Kyoto</span>
+                <h2>Kyoto in early spring</h2>
+                <p class="excerpt">
+                  Narrow streets, patient light, and the kind of quiet that changes
+                  the speed of your thinking without you noticing at first.
+                </p>
+                <p class="meta">Visited March 2026</p>
+                <a class="text-link" href="posts/three-evenings-in-kyoto/index.html">read note &rarr;</a>
+              </div>
+            </article>
+
+            <article class="card place-card" id="seoul">
+              <div class="card-media">
+                <img
+                  src="images/place-city.svg"
+                  alt="Abstract city placeholder artwork with buildings and evening light"
+                />
+              </div>
+              <div class="card-body">
+                <span class="tag">South Korea &middot; Seoul</span>
+                <h2>An evening city that still found room for softness</h2>
+                <p class="excerpt">
+                  Long walks after dinner, small stationery shops, and a rhythm that
+                  felt busy without ever becoming sharp.
+                </p>
+                <p class="meta">Visited December 2025</p>
+              </div>
+            </article>
+
+            <article class="card place-card" id="penang">
+              <div class="card-media">
+                <img
+                  src="images/place-garden.svg"
+                  alt="Abstract travel placeholder artwork with layered trees and a path"
+                />
+              </div>
+              <div class="card-body">
+                <span class="tag">Malaysia &middot; Penang</span>
+                <h2>Warm afternoons and better lunches</h2>
+                <p class="excerpt">
+                  A place I mostly remember through meals, conversations, and the
+                  feeling of rain arriving just after the heat became too much.
+                </p>
+                <p class="meta">Visited June 2025</p>
+              </div>
+            </article>
+
+            <article class="card place-card" id="yogyakarta">
+              <div class="card-media">
+                <img
+                  src="images/place-city.svg"
+                  alt="Abstract travel placeholder artwork with quiet buildings and hills"
+                />
+              </div>
+              <div class="card-body">
+                <span class="tag">Indonesia &middot; Yogyakarta</span>
+                <h2>A slower trip that stayed with me</h2>
+                <p class="excerpt">
+                  Museums in the morning, small roads in the afternoon, and enough
+                  quiet time to notice how different each neighborhood felt.
+                </p>
+                <p class="meta">Visited August 2024</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <section class="now-strip" aria-label="Right now">
+      <div class="container now-strip-inner">
+        <p class="now-strip-copy">
+          <span class="now-dot" aria-hidden="true"></span>
+          <span class="label">right now</span>
+          <span>
+            building out this site, keeping up with coding challenges, and making
+            time for badminton and piano.
+          </span>
+        </p>
+        <a class="subtle-link" href="now.html">full /now &rarr;</a>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>Ng Ying Xuan &copy; 2026</p>
+        <div class="footer-links">
+          <a href="https://github.com/bngybongybrd" target="_blank" rel="noreferrer">github</a>
+          <a href="mailto:ng.y1n9.xuan@gmail.com">email</a>
+          <a href="https://www.linkedin.com/in/ng-ying-xuan-856186271/" target="_blank" rel="noreferrer"
+            >linkedin</a
+          >
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Editorial placeholder artwork</title>
+  <desc id="desc">Warm neutral abstract illustration with paper shapes and a branch.</desc>
+  <rect width="1600" height="900" fill="#ECE8E1" />
+  <rect x="118" y="118" width="1364" height="664" rx="30" fill="#F7F5EF" stroke="#E2DFD8" stroke-width="4" />
+  <rect x="220" y="205" width="520" height="430" rx="22" fill="#F2F0EB" stroke="#E2DFD8" stroke-width="3" />
+  <rect x="270" y="270" width="420" height="22" rx="11" fill="#D6D3CB" />
+  <rect x="270" y="328" width="360" height="18" rx="9" fill="#D6D3CB" />
+  <rect x="270" y="374" width="388" height="18" rx="9" fill="#D6D3CB" />
+  <rect x="270" y="420" width="330" height="18" rx="9" fill="#D6D3CB" />
+  <path d="M1050 220c120 42 199 141 216 271-33 18-68 30-104 34-146 17-275-95-292-240 35-42 89-71 180-65Z" fill="#DBE2D7" />
+  <path d="M1122 258c44 82 47 181 8 268" stroke="#5A7A5E" stroke-width="8" stroke-linecap="round" fill="none" />
+  <path d="M1123 309c-42 2-72 18-92 47" stroke="#5A7A5E" stroke-width="8" stroke-linecap="round" fill="none" />
+  <path d="M1130 379c44 1 74 18 96 49" stroke="#5A7A5E" stroke-width="8" stroke-linecap="round" fill="none" />
+  <circle cx="1236" cy="312" r="48" fill="#F2F0EB" stroke="#E2DFD8" stroke-width="4" />
+  <circle cx="1236" cy="312" r="16" fill="#7A9E7E" />
+</svg>

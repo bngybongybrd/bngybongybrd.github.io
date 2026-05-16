@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Why I Keep Making Tiny Tools for Myself - Ng Ying Xuan</title>
+    <meta
+      name="description"
+      content="A short note on why small personal scripts and utilities often matter more than larger, more polished side projects."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Lora:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../style.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header" data-site-header>
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">Ng Ying Xuan</a>
+        <button
+          class="menu-toggle"
+          type="button"
+          data-menu-toggle
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <nav class="site-nav" data-menu aria-label="Primary navigation">
+          <a href="../../index.html">home</a>
+          <a href="../../work.html">work</a>
+          <a class="active" href="../../writing.html">writing</a>
+          <a href="../../places.html">places</a>
+          <a href="../../about.html">about</a>
+          <a href="../../now.html">now</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <article class="article-shell">
+        <div class="reading-container">
+          <div class="article-cover">
+            <img
+              src="../../images/project-screen.svg"
+              alt="Abstract project placeholder artwork with panels and content cards"
+            />
+          </div>
+
+          <header class="article-header">
+            <span class="tag">ideas</span>
+            <p class="meta">April 13, 2026</p>
+            <h1>Why I Keep Making Tiny Tools for Myself</h1>
+          </header>
+
+          <div class="article-body">
+            <p>
+              The side projects I use most are almost never the ones I would put at
+              the top of a portfolio. They are small, ordinary, and made for exactly
+              one person. One renames lecture files. One cleans copied reading lists.
+              One turns a messy block of timings into something I can paste into my
+              notes without thinking.
+            </p>
+
+            <p>
+              I like these tools because they stay honest. They are not trying to be
+              products. They do one thing, usually because I got tired of doing it by
+              hand two or three times in a row.
+            </p>
+
+            <h2>Small scope is a feature</h2>
+            <p>
+              When a project is tiny, I can keep the whole thing in my head. That
+              means I can experiment without much ceremony and still come back later
+              to understand what I wrote. It is a scale that invites finishing.
+            </p>
+
+            <p>
+              A tiny tool also teaches a surprisingly useful lesson about interfaces:
+              if the audience is only me, the tradeoffs become very obvious. What is
+              the minimum number of options I actually need? What defaults save the
+              most time? Which parts should stay visible and which can disappear into
+              the background?
+            </p>
+
+            <h2>One example I keep around</h2>
+            <p>
+              I have a small script that turns a list of tasks into a softer daily
+              summary. It sorts the urgent items first, trims trailing spaces, and
+              prints a clean checklist I can paste into a notebook.
+            </p>
+
+            <pre><code>def morning_list(items):
+    cleaned = [item.strip() for item in items if item.strip()]
+    urgent = [item for item in cleaned if item.startswith("!")]
+    regular = [item for item in cleaned if not item.startswith("!")]
+    return urgent + regular</code></pre>
+
+            <p>
+              That is not life-changing software. It just removes a little friction
+              from the beginning of a day. I think that still counts.
+            </p>
+
+            <h2>What they're really for</h2>
+            <p>
+              These tools are a way of practicing care. They ask me to notice what
+              repeats, what feels heavier than it should, and what might become easier
+              with a little structure. Some of them stay private forever. A few grow
+              into larger projects. Most of them simply help me work with less noise.
+            </p>
+          </div>
+
+          <p class="article-footer">
+            <a class="back-link" href="../../writing.html">&larr; back to writing</a>
+          </p>
+        </div>
+      </article>
+    </main>
+
+    <section class="now-strip" aria-label="Right now">
+      <div class="container now-strip-inner">
+        <p class="now-strip-copy">
+          <span class="now-dot" aria-hidden="true"></span>
+          <span class="label">right now</span>
+          <span>
+            building out this site, keeping up with coding challenges, and making
+            time for badminton and piano.
+          </span>
+        </p>
+        <a class="subtle-link" href="../../now.html">full /now &rarr;</a>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>Ng Ying Xuan &copy; 2026</p>
+        <div class="footer-links">
+          <a href="https://github.com/bngybongybrd" target="_blank" rel="noreferrer">github</a>
+          <a href="mailto:ng.y1n9.xuan@gmail.com">email</a>
+          <a href="https://www.linkedin.com/in/ng-ying-xuan-856186271/" target="_blank" rel="noreferrer"
+            >linkedin</a
+          >
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

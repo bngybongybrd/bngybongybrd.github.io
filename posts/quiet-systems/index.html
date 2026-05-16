@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What a Hackathon Weekend Taught Me About Quiet Systems - Ng Ying Xuan</title>
+    <meta
+      name="description"
+      content="A reflection on building under pressure, choosing clarity, and keeping software calm even when the weekend is not."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Lora:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../style.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header" data-site-header>
+      <div class="container header-inner">
+        <a class="brand" href="../../index.html">Ng Ying Xuan</a>
+        <button
+          class="menu-toggle"
+          type="button"
+          data-menu-toggle
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <nav class="site-nav" data-menu aria-label="Primary navigation">
+          <a href="../../index.html">home</a>
+          <a href="../../work.html">work</a>
+          <a class="active" href="../../writing.html">writing</a>
+          <a href="../../places.html">places</a>
+          <a href="../../about.html">about</a>
+          <a href="../../now.html">now</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <article class="article-shell">
+        <div class="reading-container">
+          <div class="article-cover">
+            <img
+              src="../../images/editorial-cover.svg"
+              alt="Abstract editorial placeholder artwork in warm neutral tones"
+            />
+          </div>
+
+          <header class="article-header">
+            <span class="tag">learning</span>
+            <p class="meta">May 10, 2026</p>
+            <h1>What a Hackathon Weekend Taught Me About Quiet Systems</h1>
+          </header>
+
+          <div class="article-body">
+            <p>
+              Most hackathon weekends feel loud, even when the room itself is quiet.
+              There are timers everywhere, too many tabs open, and the low-grade
+              panic that comes from knowing every feature choice has to fit inside a
+              very small amount of time. I used to respond by adding more. More
+              screens. More shortcuts. More logic. This time, I tried the opposite.
+            </p>
+
+            <p>
+              Our team's idea was small: make volunteering schedules easier to update
+              without asking organizers to learn a complicated dashboard in the middle
+              of a busy week. The constraint was useful. Instead of chasing novelty,
+              we kept asking what could stay still.
+            </p>
+
+            <h2>Start from the calmest part of the problem</h2>
+            <p>
+              The first useful thing we did was write down what the user needed to do
+              in the least stressful possible version of the product. It turned out to
+              be only three actions: check a shift, swap a shift, and confirm a
+              change. Once those were clear, most of the extra interface ideas looked
+              unnecessary.
+            </p>
+
+            <p>
+              I think I learn this lesson every semester in a slightly different way:
+              when time is short, clarity is not a compromise. It is often the only
+              thing that survives first contact with real use.
+            </p>
+
+            <h2>Leave room for the next person</h2>
+            <p>
+              Quiet systems are also easier to inherit. A hackathon project has to be
+              built quickly, but it does not have to feel rushed forever. We kept our
+              file names plain, wrote tiny comments where the logic became dense, and
+              avoided packing unrelated behaviors into the same function.
+            </p>
+
+            <figure>
+              <img
+                src="../../images/project-screen.svg"
+                alt="Abstract interface placeholder artwork with panels and cards"
+              />
+              <figcaption>
+                The prototype itself was simple, which made every next step easier to
+                explain.
+              </figcaption>
+            </figure>
+
+            <h2>A tiny script that helped</h2>
+            <p>
+              The most useful code I wrote all weekend was not glamorous. It was a
+              small formatter that turned raw sign-up data into a cleaner summary for
+              the interface. It saved us from debugging the same shape mismatch over
+              and over again.
+            </p>
+
+            <pre><code>const summarizeShifts = (entries) =&gt;
+  entries.map((entry) =&gt; ({
+    name: entry.name.trim(),
+    slot: `${entry.day} - ${entry.start}-${entry.end}`,
+    status: entry.confirmed ? "confirmed" : "pending"
+  }));</code></pre>
+
+            <p>
+              That function is ordinary on purpose. I want to remember that much of
+              programming is not about cleverness. It is about making the next step a
+              little less noisy than the last one.
+            </p>
+
+            <h2>What I kept</h2>
+            <p>
+              We did not win the weekend, but I left with something more useful than a
+              medal: a clearer sense of the kind of software I want to make. I want
+              interfaces that lower the temperature of a task. I want code that helps
+              the next person stay oriented. I want tools that do their job without
+              needing to announce themselves too loudly.
+            </p>
+
+            <p>
+              That is probably true beyond hackathons too. The work that lasts is
+              often the work that makes room for people to think.
+            </p>
+          </div>
+
+          <p class="article-footer">
+            <a class="back-link" href="../../writing.html">&larr; back to writing</a>
+          </p>
+        </div>
+      </article>
+    </main>
+
+    <section class="now-strip" aria-label="Right now">
+      <div class="container now-strip-inner">
+        <p class="now-strip-copy">
+          <span class="now-dot" aria-hidden="true"></span>
+          <span class="label">right now</span>
+          <span>
+            building out this site, keeping up with coding challenges, and making
+            time for badminton and piano.
+          </span>
+        </p>
+        <a class="subtle-link" href="../../now.html">full /now &rarr;</a>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>Ng Ying Xuan &copy; 2026</p>
+        <div class="footer-links">
+          <a href="https://github.com/bngybongybrd" target="_blank" rel="noreferrer">github</a>
+          <a href="mailto:ng.y1n9.xuan@gmail.com">email</a>
+          <a href="https://www.linkedin.com/in/ng-ying-xuan-856186271/" target="_blank" rel="noreferrer"
+            >linkedin</a
+          >
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
