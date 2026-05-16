@@ -1,18 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
   <title id="title">Garden travel placeholder</title>
   <desc id="desc">Abstract travel illustration with trees, a path, and distant roofs.</desc>
-  <rect width="1600" height="900" fill="#ECE8E1" />
-  <rect y="540" width="1600" height="360" fill="#E5E1D8" />
-  <path d="M0 594c118-54 252-85 402-76 171 9 301 64 446 64 144 0 241-58 407-58 120 0 238 28 345 70v306H0V594Z" fill="#D8DED2" />
-  <path d="M0 654c129-48 239-71 364-71 174 0 295 78 471 78 156 0 280-80 462-80 112 0 215 24 303 56v263H0V654Z" fill="#C4D0BF" />
-  <path d="M520 900c22-150 92-260 205-330 59 18 119 44 187 87-106 66-158 143-173 243H520Z" fill="#F7F5EF" />
-  <path d="M868 900c13-116 78-214 200-282 41 24 78 52 112 84-78 56-128 122-147 198H868Z" fill="#F0EDE7" />
-  <circle cx="1286" cy="226" r="82" fill="#F7F5EF" stroke="#E2DFD8" stroke-width="4" />
-  <path d="M257 520c0-146 65-252 150-252 84 0 149 106 149 252H257Z" fill="#7A9E7E" />
-  <path d="M382 520c0-132 54-228 126-228 71 0 126 96 126 228H382Z" fill="#5A7A5E" />
-  <path d="M1075 520c0-154 70-266 162-266 92 0 161 112 161 266h-323Z" fill="#7A9E7E" />
-  <path d="M1167 520c0-116 45-202 102-202s101 86 101 202h-203Z" fill="#5A7A5E" />
-  <rect x="673" y="432" width="168" height="98" rx="12" fill="#F7F5EF" stroke="#E2DFD8" stroke-width="4" />
-  <path d="M652 432 757 360l105 72H652Z" fill="#DCC6B2" />
-  <rect x="739" y="470" width="40" height="60" rx="8" fill="#ABA99F" />
+  <rect width="1600" height="900" fill="#171914" />
+  <rect y="540" width="1600" height="360" fill="#1D211B" />
+  <path d="M0 594c118-54 252-85 402-76 171 9 301 64 446 64 144 0 241-58 407-58 120 0 238 28 345 70v306H0V594Z" fill="#252D23" />
+  <path d="M0 654c129-48 239-71 364-71 174 0 295 78 471 78 156 0 280-80 462-80 112 0 215 24 303 56v263H0V654Z" fill="#313C2F" />
+  <path d="M520 900c22-150 92-260 205-330 59 18 119 44 187 87-106 66-158 143-173 243H520Z" fill="#242722" />
+  <path d="M868 900c13-116 78-214 200-282 41 24 78 52 112 84-78 56-128 122-147 198H868Z" fill="#20231E" />
+  <circle cx="1286" cy="226" r="82" fill="#242722" stroke="#32362F" stroke-width="4" />
+  <path d="M257 520c0-146 65-252 150-252 84 0 149 106 149 252H257Z" fill="#89A88C" />
+  <path d="M382 520c0-132 54-228 126-228 71 0 126 96 126 228H382Z" fill="#5F775F" />
+  <path d="M1075 520c0-154 70-266 162-266 92 0 161 112 161 266h-323Z" fill="#89A88C" />
+  <path d="M1167 520c0-116 45-202 102-202s101 86 101 202h-203Z" fill="#5F775F" />
+  <rect x="673" y="432" width="168" height="98" rx="12" fill="#242722" stroke="#32362F" stroke-width="4" />
+  <path d="M652 432 757 360l105 72H652Z" fill="#6D5E52" />
+  <rect x="739" y="470" width="40" height="60" rx="8" fill="#8E877A" />
 </svg>

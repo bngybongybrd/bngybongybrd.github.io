@@ -1,13 +1,13 @@
 :root {
-  --background: #faf9f6;
-  --surface: #f2f0eb;
-  --surface-muted: #ebe8e1;
-  --border: #e2dfd8;
-  --text-primary: #2c2b28;
-  --text-secondary: #7a7870;
-  --text-faint: #aba99f;
-  --accent: #7a9e7e;
-  --accent-dark: #5a7a5e;
+  --background: #161714;
+  --surface: #1d1f1b;
+  --surface-muted: #242722;
+  --border: #32362f;
+  --text-primary: #f1ede4;
+  --text-secondary: #b8b1a3;
+  --text-faint: #8e877a;
+  --accent: #89a88c;
+  --accent-dark: #a7c1aa;
   --radius-small: 6px;
   --radius-medium: 12px;
   --radius-large: 14px;
@@ -29,6 +29,7 @@
 
 html {
   font-size: 16px;
+  color-scheme: dark;
 }
 
 body {
@@ -184,7 +185,7 @@ main {
   padding: 0.7rem 1rem;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: transparent;
+  background: var(--surface);
   font-size: 0.875rem;
 }
 
@@ -401,7 +402,7 @@ main {
   padding: 0.35rem 0.75rem;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: var(--background);
+  background: var(--surface-muted);
   font-size: 0.8125rem;
   line-height: 1.35;
   color: var(--text-secondary);

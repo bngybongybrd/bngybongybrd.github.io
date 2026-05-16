@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-labelledby="title desc">
   <title id="title">Portrait placeholder</title>
   <desc id="desc">Abstract portrait placeholder with a warm neutral background and a simple silhouette.</desc>
-  <rect width="800" height="800" fill="#ECE8E1" />
-  <circle cx="400" cy="400" r="306" fill="#F7F5EF" stroke="#E2DFD8" stroke-width="6" />
-  <circle cx="400" cy="300" r="120" fill="#D6D3CB" />
-  <path d="M214 614c38-134 116-202 186-202s148 68 186 202H214Z" fill="#ABA99F" />
-  <path d="M332 262c14-48 43-78 68-78 31 0 64 29 77 78-29-19-55-28-79-28-24 0-46 8-66 28Z" fill="#7A9E7E" />
+  <rect width="800" height="800" fill="#171914" />
+  <circle cx="400" cy="400" r="306" fill="#1D1F1B" stroke="#32362F" stroke-width="6" />
+  <circle cx="400" cy="300" r="120" fill="#5A5E57" />
+  <path d="M214 614c38-134 116-202 186-202s148 68 186 202H214Z" fill="#8E877A" />
+  <path d="M332 262c14-48 43-78 68-78 31 0 64 29 77 78-29-19-55-28-79-28-24 0-46 8-66 28Z" fill="#89A88C" />
 </svg>

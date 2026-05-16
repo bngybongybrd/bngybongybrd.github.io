@@ -1,18 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
   <title id="title">City travel placeholder</title>
   <desc id="desc">Abstract travel illustration with buildings, distant hills, and evening light.</desc>
-  <rect width="1600" height="900" fill="#ECE8E1" />
-  <rect y="588" width="1600" height="312" fill="#E4DFD4" />
-  <path d="M0 620c147-79 330-118 545-89 155 21 262 69 381 69 117 0 234-45 348-45 125 0 227 24 326 65v280H0V620Z" fill="#D6DCCE" />
-  <path d="M0 690c140-59 285-87 448-87 160 0 273 53 413 53 126 0 239-38 382-38 139 0 253 26 357 67v215H0V690Z" fill="#C1CCBB" />
-  <circle cx="1220" cy="182" r="70" fill="#F7F5EF" stroke="#E2DFD8" stroke-width="4" />
-  <rect x="236" y="350" width="188" height="290" rx="12" fill="#F7F5EF" stroke="#E2DFD8" stroke-width="4" />
-  <rect x="412" y="286" width="212" height="354" rx="12" fill="#F2F0EB" stroke="#E2DFD8" stroke-width="4" />
-  <rect x="606" y="386" width="174" height="254" rx="12" fill="#F7F5EF" stroke="#E2DFD8" stroke-width="4" />
-  <rect x="838" y="322" width="204" height="318" rx="12" fill="#F2F0EB" stroke="#E2DFD8" stroke-width="4" />
-  <rect x="1040" y="402" width="160" height="238" rx="12" fill="#F7F5EF" stroke="#E2DFD8" stroke-width="4" />
-  <rect x="1220" y="336" width="182" height="304" rx="12" fill="#F2F0EB" stroke="#E2DFD8" stroke-width="4" />
-  <g fill="#ABA99F">
+  <rect width="1600" height="900" fill="#171914" />
+  <rect y="588" width="1600" height="312" fill="#1C1F1A" />
+  <path d="M0 620c147-79 330-118 545-89 155 21 262 69 381 69 117 0 234-45 348-45 125 0 227 24 326 65v280H0V620Z" fill="#283028" />
+  <path d="M0 690c140-59 285-87 448-87 160 0 273 53 413 53 126 0 239-38 382-38 139 0 253 26 357 67v215H0V690Z" fill="#334035" />
+  <circle cx="1220" cy="182" r="70" fill="#242722" stroke="#32362F" stroke-width="4" />
+  <rect x="236" y="350" width="188" height="290" rx="12" fill="#242722" stroke="#32362F" stroke-width="4" />
+  <rect x="412" y="286" width="212" height="354" rx="12" fill="#1D1F1B" stroke="#32362F" stroke-width="4" />
+  <rect x="606" y="386" width="174" height="254" rx="12" fill="#242722" stroke="#32362F" stroke-width="4" />
+  <rect x="838" y="322" width="204" height="318" rx="12" fill="#1D1F1B" stroke="#32362F" stroke-width="4" />
+  <rect x="1040" y="402" width="160" height="238" rx="12" fill="#242722" stroke="#32362F" stroke-width="4" />
+  <rect x="1220" y="336" width="182" height="304" rx="12" fill="#1D1F1B" stroke="#32362F" stroke-width="4" />
+  <g fill="#8E877A">
     <rect x="274" y="402" width="38" height="28" rx="6" />
     <rect x="332" y="402" width="38" height="28" rx="6" />
     <rect x="274" y="454" width="38" height="28" rx="6" />
@@ -26,5 +26,5 @@
     <rect x="1270" y="390" width="42" height="26" rx="6" />
     <rect x="1330" y="390" width="42" height="26" rx="6" />
   </g>
-  <rect x="1300" y="136" width="124" height="18" rx="9" fill="#7A9E7E" />
+  <rect x="1300" y="136" width="124" height="18" rx="9" fill="#89A88C" />
 </svg>
