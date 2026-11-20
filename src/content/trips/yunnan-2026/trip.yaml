@@ -1,0 +1,54 @@
+# Trip details. Values come from PLAN.md sections 7.1 and 8.
+slug: yunnan-2026
+title: Yunnan
+subtitle: 云南
+dates:
+  start: 2026-09-12
+  end: 2026-09-21
+summary: Ten days across Yunnan, from Dali to the Yubeng trail.
+# cover: media/hero.webp   # [PLACEHOLDER] used on cards and the globe page
+# hero: media/hero.webp    # [PLACEHOLDER] the wide photo at the top of the trip page
+stats:
+  days: 10
+  highlight: Yubeng hike
+route: Haikou • Kunming • Dali • Shangri-La • Yubeng • Lijiang • Xiamen
+globe:
+  coords: [25.0, 101.0] # [lat, lng] for the pin on the globe
+# Coordinates are approximate: verify each in Google Maps (PLAN.md §8).
+# `kind` is one of city | hike | food | stay. Yubeng is marked "hike"; change if you prefer.
+stops:
+  - id: haikou
+    name: Haikou
+    coords: [20.04, 110.35]
+    days: [1]
+    kind: city
+  - id: kunming
+    name: Kunming
+    coords: [25.04, 102.72]
+    days: [1, 10]
+    kind: city
+  - id: dali
+    name: Dali
+    coords: [25.69, 100.16]
+    days: [1, 2]
+    kind: city
+  - id: shangrila
+    name: Shangri-La
+    coords: [27.83, 99.70]
+    days: [3, 4, 8]
+    kind: city
+  - id: yubeng
+    name: Yubeng
+    coords: [28.43, 98.80]
+    days: [5, 6, 7]
+    kind: hike
+  - id: lijiang
+    name: Lijiang
+    coords: [26.87, 100.23]
+    days: [8, 9]
+    kind: city
+  - id: xiamen
+    name: Xiamen
+    coords: [24.48, 118.09]
+    days: [10]
+    kind: city
