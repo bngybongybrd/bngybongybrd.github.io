@@ -1,0 +1,202 @@
+---
+// Sticky top bar: name on the left, links and theme toggle on the right.
+// On narrow screens the links fold behind a menu button (only when JS runs;
+// without JS they just wrap onto a second line).
+import { navItems, siteName } from "../config";
+import ThemeToggle from "./ThemeToggle.astro";
+
+// Work out the active link at build time, so no JS is needed for it.
+// Trailing slashes are removed so "/work" and "/work/" compare equal.
+const strip = (path: string) => (path.length > 1 ? path.replace(/\/$/, "") : path);
+const current = strip(Astro.url.pathname);
+const isActive = (href: string) => {
+  const target = strip(href);
+  return target === "/" ? current === "/" : current === target || current.startsWith(target + "/");
+};
+---
+
+<header class="site-header">
+  <nav class="nav wide" aria-label="Main">
+    <a class="name" href="/">{siteName}</a>
+
+    <!--
+      The menu button comes before the links in the HTML on purpose: after
+      opening the menu, the next Tab lands on the first link. (On wide screens
+      the button is hidden, so the order there is name → links → toggle.)
+    -->
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="nav-links">
+      <span class="visually-hidden">Menu</span>
+      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+        <path d="M2 4.5h12M2 8h12M2 11.5h12" stroke="currentColor" stroke-width="1.25"></path>
+      </svg>
+    </button>
+
+    <ul class="links" id="nav-links">
+      {
+        navItems.map((item) => (
+          <li>
+            <a href={item.href} aria-current={isActive(item.href) ? "page" : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <ThemeToggle />
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    /* Translucent: the page colour at 85%, with a light blur behind it. */
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav {
+    position: relative; /* the mobile menu is positioned against this */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 1.5rem;
+    min-height: var(--nav-height);
+  }
+
+  .name {
+    font-family: var(--font-heading);
+    font-size: 1.0625rem;
+    text-decoration: none;
+    margin-right: auto; /* pushes everything else to the right */
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .links a {
+    font-size: var(--text-nav);
+    text-transform: lowercase;
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .links a:hover {
+    color: var(--text);
+  }
+
+  /* The current page: normal text colour plus a thin sage underline. */
+  .links a[aria-current="page"] {
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 6px;
+  }
+
+  .menu-button {
+    display: none; /* only used on small screens with JS (below) */
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition:
+      color var(--transition),
+      border-color var(--transition);
+  }
+
+  .menu-button:hover,
+  .menu-button[aria-expanded="true"] {
+    color: var(--text);
+    border-color: var(--border);
+  }
+
+  @media (max-width: 679px) {
+    .nav {
+      column-gap: 0.25rem; /* menu button and toggle sit close together */
+    }
+
+    /* Without JS: links wrap onto their own row under the name. */
+    .links {
+      order: 3;
+      width: 100%;
+      padding-bottom: 0.75rem;
+    }
+
+    /* With JS: hide the links behind the menu button. */
+    :global(.js) .menu-button {
+      display: inline-flex;
+    }
+
+    :global(.js) .links {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      padding: 0.5rem var(--gutter) 1rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+
+    :global(.js) .links[data-open] {
+      display: flex;
+    }
+
+    :global(.js) .links a {
+      display: block;
+      padding: 0.6rem 0;
+      font-size: 1rem;
+    }
+  }
+</style>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>(".menu-button");
+  const links = document.getElementById("nav-links");
+
+  function setOpen(open: boolean) {
+    button?.setAttribute("aria-expanded", String(open));
+    links?.toggleAttribute("data-open", open);
+  }
+
+  const isOpen = () => button?.getAttribute("aria-expanded") === "true";
+
+  button?.addEventListener("click", () => setOpen(!isOpen()));
+
+  // Close after choosing a link.
+  links?.addEventListener("click", (event) => {
+    if ((event.target as Element).closest("a")) setOpen(false);
+  });
+
+  // Close when clicking anywhere outside the nav.
+  document.addEventListener("click", (event) => {
+    if (isOpen() && !(event.target as Element).closest(".nav")) setOpen(false);
+  });
+
+  // Escape closes the menu and puts focus back on the button, so keyboard
+  // users don't lose their place.
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && isOpen()) {
+      setOpen(false);
+      button?.focus();
+    }
+  });
+</script>

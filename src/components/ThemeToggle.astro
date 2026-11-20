@@ -1,0 +1,76 @@
+---
+// A button that switches between light and dark and remembers the choice.
+// The first-paint part lives in BaseLayout's inline script; this file only
+// handles clicks. Hidden without JavaScript, because it can't work without it.
+---
+
+<button class="theme-toggle" type="button" aria-pressed="false">
+  <span class="visually-hidden">Dark theme</span>
+  <!-- A half-filled circle: a quiet light/dark symbol. -->
+  <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+    <circle cx="8" cy="8" r="6.25" fill="none" stroke="currentColor" stroke-width="1.25"></circle>
+    <path d="M8 1.75a6.25 6.25 0 0 1 0 12.5z" fill="currentColor"></path>
+  </svg>
+</button>
+
+<style>
+  .theme-toggle {
+    display: none; /* shown only when JavaScript is running (see below) */
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition:
+      color var(--transition),
+      border-color var(--transition);
+  }
+
+  /* `.js` is added to <html> by the inline script in BaseLayout. :global()
+     is needed because <html> is outside this component. */
+  :global(.js) .theme-toggle {
+    display: inline-flex;
+  }
+
+  .theme-toggle:hover {
+    color: var(--text);
+    border-color: var(--border);
+  }
+</style>
+
+<script>
+  // Processed by Astro: bundled, and runs after the page has been parsed.
+  const button = document.querySelector<HTMLButtonElement>(".theme-toggle");
+  const root = document.documentElement;
+  const systemDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+  // The theme on screen: your saved choice if there is one, otherwise the system's.
+  function currentTheme() {
+    return root.getAttribute("data-theme") || (systemDark.matches ? "dark" : "light");
+  }
+
+  // aria-pressed tells screen readers whether "Dark theme" is on.
+  function syncButton() {
+    button?.setAttribute("aria-pressed", String(currentTheme() === "dark"));
+  }
+
+  button?.addEventListener("click", () => {
+    const next = currentTheme() === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try {
+      localStorage.setItem("theme", next);
+    } catch {
+      // Storage blocked: the switch still works for this page, it just won't be remembered.
+    }
+    syncButton();
+  });
+
+  // If you haven't chosen and the system theme changes, keep the button honest.
+  systemDark.addEventListener("change", syncButton);
+  syncButton();
+</script>

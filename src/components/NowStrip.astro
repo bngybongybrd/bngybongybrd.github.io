@@ -1,0 +1,55 @@
+---
+// The "right now" line above the footer, on every page.
+import { nowStrip } from "../config";
+---
+
+<aside class="now-strip" aria-label="Right now">
+  <div class="inner wide">
+    <span class="dot" aria-hidden="true"></span>
+    <span class="label">right now</span>
+    <p class="text">{nowStrip}</p>
+    <a class="more" href="/now/">full /now →</a>
+  </div>
+</aside>
+
+<style>
+  .now-strip {
+    border-top: 1px solid var(--border);
+    margin-top: 5rem;
+  }
+
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 0.75rem;
+    padding-block: 1.1rem;
+    font-size: var(--text-sm);
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    align-self: center;
+  }
+
+  .label {
+    color: var(--accent-dark);
+  }
+
+  .text {
+    color: var(--text-muted);
+    flex: 1 1 16rem;
+  }
+
+  .more {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .more:hover {
+    color: var(--text);
+  }
+</style>

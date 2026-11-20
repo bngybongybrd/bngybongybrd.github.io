@@ -1,0 +1,196 @@
+/*
+  Base styles: a small reset plus the default look of plain HTML elements.
+  Component-specific styles live inside each component's <style> block.
+*/
+
+/* --- Reset --- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box; /* width includes padding and border: easier maths */
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+ul,
+ol {
+  margin: 0;
+}
+
+img,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* --- Page --- */
+
+html {
+  /* Keep anchor jumps from hiding under the sticky nav. */
+  scroll-padding-top: calc(var(--nav-height) + 1rem);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 350;
+  line-height: var(--leading-body);
+  transition:
+    background-color var(--transition),
+    color var(--transition);
+}
+
+main {
+  flex: 1; /* pushes the now strip and footer to the bottom on short pages */
+}
+
+/* --- Text --- */
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em; /* large headings slightly tight */
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(2rem, 1.4rem + 2.6vw, 3rem);
+  letter-spacing: -0.02em;
+}
+h2 {
+  font-size: clamp(1.5rem, 1.25rem + 1vw, 1.875rem);
+}
+h3 {
+  font-size: 1.25rem;
+}
+
+p + p {
+  margin-top: 1.1em;
+}
+
+strong {
+  font-weight: 600;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: var(--border-2);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition: text-decoration-color var(--transition), color var(--transition);
+}
+
+a:hover {
+  text-decoration-color: var(--accent);
+}
+
+/* Chinese runs get system CJK fonts (Stage 1 adds lang="zh-Hans" automatically). */
+:lang(zh) {
+  font-family: var(--font-cjk);
+}
+
+code,
+kbd,
+pre {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* Small lowercase labels, e.g. section eyebrows. */
+.label {
+  font-size: var(--text-sm);
+  text-transform: lowercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+/* --- Layout containers --- */
+
+.reading {
+  width: 100%;
+  max-width: calc(var(--reading-width) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.wide {
+  width: 100%;
+  max-width: calc(var(--wide-width) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Generous space above each top-level page section. */
+.page {
+  padding-top: clamp(3rem, 2rem + 4vw, 5.5rem);
+}
+
+/* --- Accessibility --- */
+
+/* A clear focus ring for keyboard users only (not on mouse click). */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Hidden visually but still read by screen readers. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* "Skip to content" link: invisible until focused with the keyboard. */
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: -100px;
+  z-index: 100;
+  padding: 0.5rem 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+}
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+/* If the reader asks for less motion, switch off transitions and smooth scrolling. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
