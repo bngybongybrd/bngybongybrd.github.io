@@ -5,37 +5,60 @@
   only by the trip page.
 */
 
-/* --- Reading column ------------------------------------------------------
-   Text stops at the reading width; [photo-only] blocks may use the full
-   wide layout. Both share the same left edge as the rest of the site. */
+/* --- The story column -----------------------------------------------------
+   A trip is read top to bottom like a book, so its column is centred on the
+   page. Three widths, each centred on the same axis:
+     text            680px   comfortable line length
+     runs of photos  880px   photos a step wider than the words
+     [photo-only]    1180px  the widest moments, photos alone
+   Body text stays left-aligned inside its column: centred paragraphs are
+   hard to read because every line starts in a different place. */
+
+:root {
+  --photo-width: 880px;
+  --photo-only-width: 1180px;
+}
 
 .prose > * {
   max-width: var(--reading-width);
+  margin-inline: auto;
+}
+
+.prose > .media-run {
+  max-width: var(--photo-width);
 }
 
 .prose > .photo-only {
-  max-width: var(--wide-width);
+  max-width: var(--photo-only-width);
 }
 
 .prose > * + * {
   margin-top: 1.1em;
 }
 
-/* --- Photo groups ------------------------------------------------------- */
-
-.media-group,
-.photo-only {
-  margin-block: 2rem;
+/* Elements built by the trip components share the text column. */
+.trip .note-card,
+.trip .trip-notes h2 {
+  max-width: var(--reading-width);
+  margin-inline: auto;
 }
 
+/* --- Photo groups ------------------------------------------------------- */
+
+/* A run (or a [photo-only] block) stacks its groups with the same small
+   gap as the photos inside a group, so 3+3+2 reads as one spread. */
+.media-run,
 .photo-only {
   display: grid;
   gap: 0.5rem;
-  margin-block: 2.75rem;
 }
 
-.photo-only > .media-group {
-  margin-block: 0;
+.prose > .media-run {
+  margin-block: 2.25rem;
+}
+
+.prose > .photo-only {
+  margin-block: 3.5rem;
 }
 
 .media-group {
@@ -77,12 +100,17 @@
   object-fit: cover;
 }
 
-/* One photo on its own: shown whole. Tall (portrait) photos are capped at
-   most of the screen height so one photo doesn't fill several screens. */
+/* One photo on its own: shown whole and centred. Tall (portrait) photos are
+   capped at most of the screen height so one photo doesn't fill several
+   screens. */
+.media-1 {
+  justify-items: center;
+}
+
 .media-1 img {
   width: auto;
   max-width: 100%;
-  max-height: min(85vh, 860px);
+  max-height: min(80vh, 820px);
 }
 
 /* Two side by side, alternating which side is wider between groups.
@@ -138,7 +166,7 @@
 .media-video video {
   width: auto;
   max-width: 100%;
-  max-height: min(85vh, 860px);
+  max-height: min(75vh, 720px);
   background: var(--surface);
 }
 

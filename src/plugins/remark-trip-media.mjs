@@ -41,8 +41,10 @@ export default function remarkTripMedia() {
     let photoOnly = null; // collects media while inside [photo-only]
     let bucket = []; // collects consecutive media outside [photo-only]
 
+    // One run of consecutive photos (e.g. 8 → groups of 3+3+2) is wrapped in a
+    // single .media-run so its groups sit tight together, like one spread.
     const flushBucket = () => {
-      if (bucket.length) output.push(...buildGroups(bucket, ctx, false));
+      if (bucket.length) output.push(element("div", ["media-run"], buildGroups(bucket, ctx, false)));
       bucket = [];
     };
 

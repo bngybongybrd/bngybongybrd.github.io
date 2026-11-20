@@ -52,10 +52,11 @@ const isActive = (href: string) => {
     position: sticky;
     top: 0;
     z-index: 10;
-    /* Translucent: the page colour at 85%, with a light blur behind it. */
-    background: color-mix(in srgb, var(--bg) 85%, transparent);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    /* Nearly solid page colour, with a blur, so text scrolling underneath
+       is only a soft hint rather than readable letters. */
+    background: color-mix(in srgb, var(--bg) 94%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
   }
 

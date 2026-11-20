@@ -34,10 +34,9 @@ const Intro = intro ? (await render(intro)).Content : null;
 ---
 
 <BaseLayout title={trip.data.title} description={trip.data.summary}>
-  <article class="trip wide" id="trip-top">
-    <p class="back"><a href="/places/">← All places</a></p>
+  <TripHero trip={trip} />
 
-    <TripHero trip={trip} />
+  <article class="trip">
     <StatsBar trip={trip} />
 
     {/* Stage 1b: the overview map goes here (MapLibre, under the stats bar). */}
@@ -59,26 +58,14 @@ const Intro = intro ? (await render(intro)).Content : null;
 </BaseLayout>
 
 <style>
+  /* The story column is centred on the page (see trip.css for widths). */
   .trip {
-    padding-top: 2rem;
-  }
-
-  .back {
-    margin-bottom: 1.5rem;
-    font-size: var(--text-sm);
-  }
-
-  .back a {
-    color: var(--text-muted);
-    text-decoration: none;
-  }
-
-  .back a:hover {
-    color: var(--text);
+    padding-inline: var(--gutter);
   }
 
   .intro {
-    margin-top: 2.5rem;
+    margin-top: 3.5rem;
+    font-size: 1.125rem;
   }
 </style>
 

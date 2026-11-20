@@ -70,6 +70,24 @@ A plugin is a function that receives the tree and changes it. **remark** plugins
 6. A wrapper is a node with `data.hName`, e.g. `{ data: { hName: "figure" }, children: [image] }`. When the tree becomes HTML, it turns into `<figure>`. The image node inside is untouched, so **Astro still optimises it**. That's why we wrap rather than write HTML for photos.
 7. Videos are the exception. Astro's image pipeline can't process `.mp4`, so the plugin writes a raw `<video>` tag that points at the copy `sync-videos.mjs` made in `public/trips/`.
 
+### The page layout: a centred story column
+
+A trip page is read top to bottom like a book, so it uses a **centred** column. The shorter index-style pages keep the shared left edge from Stage 0. There are three widths, all centred on the same axis:
+
+| What | Max width | Why |
+|---|---|---|
+| Text | 680px | Comfortable line length (about 75 characters) |
+| Runs of photos | 880px | Photos a step wider than the words |
+| `[photo-only]` | 1180px | The widest moments, photos alone |
+
+Body text stays **left-aligned inside** its centred column. With centred paragraphs every line starts in a different place, which makes them hard to read. The day headings *are* centred, because they open each day like a chapter.
+
+Each run of consecutive photos (e.g. 3+3+2) is wrapped in one `.media-run` with the same small gap as inside a group, so it reads as one spread.
+
+### The hero: title over the photo
+
+With a hero photo, the image runs edge to edge (`position: absolute; inset: 0; object-fit: cover`) and the title sits over its lower part. White text on an unknown photo needs a dark enough background, so `::after` adds a **fade** that is dark at the bottom and clear at the top. A flat dark tint would dull the whole photo. Without a hero, the title block opens the page on its own.
+
 ### How the grids look the way they do (`src/styles/trip.css`)
 
 - **Two-up:** `grid-template-columns: 1.4fr 1fr` gives uneven widths, and `.flip` swaps them for the next pair. The group has a fixed `aspect-ratio`, and each photo uses `object-fit: cover`, so cells line up by cropping a little at the edges.
@@ -90,6 +108,14 @@ Without JavaScript, the chips are still normal `#day-N` links that jump to each 
 ### Videos, progressive enhancement again
 
 The HTML has `controls`, so without JavaScript you can press play. The trip page script removes the controls and plays the muted clip only while it's on screen. If your system asks for reduced motion, the script leaves it alone, so you see the poster and can choose to play it.
+
+## Changes from PLAN.md (decided during the Stage 1 design review)
+
+- **Title over the hero photo**, on a soft dark fade, instead of below it. The fade is the one gradient on the site, and it's there for legibility.
+- **Centred story column** on trip pages, with photo runs wider than the text.
+- **Stats as one quiet line** ("10 days   7 stops   Yubeng hike") instead of a bordered bar.
+- **No empty hero box** when there's no hero photo yet.
+- **Sticky bars are solid or nearly solid**, so text scrolling underneath doesn't show through.
 
 ## Good to know
 
