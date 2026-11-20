@@ -1,53 +1,12 @@
 ---
-// Temporary home page for Stage 0. It only exists to show the layout,
-// fonts and colours working. Stage 3 replaces it with the real home page.
+// Temporary home page. Stage 3 replaces it with the real one.
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout>
   <section class="page reading">
-    <p class="label">welcome</p>
     <h1>[PLACEHOLDER: home heading]</h1>
     <p class="lede">[PLACEHOLDER: short intro, two or three sentences]</p>
-  </section>
-
-  <!-- Everything below is a temporary layout check, removed in Stage 3. -->
-  <section class="page reading check" aria-labelledby="check-heading">
-    <p class="label">stage 0 · layout check</p>
-    <h2 id="check-heading">Type and colour</h2>
-    <p>
-      Temporary test text so the reading column can be checked. Lorem ipsum dolor sit amet,
-      consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-      aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-      ea commodo consequat.
-    </p>
-    <p>
-      A <a href="/work/">normal link</a>, some <strong>bold text</strong>, inline <code>code</code>,
-      and a Chinese run: <span lang="zh-Hans">云南</span>.
-    </p>
-
-    <h3>Colour tokens</h3>
-    <ul class="swatches">
-      {
-        ["bg", "surface", "surface-2", "border", "border-2", "text", "text-muted", "text-faint", "accent", "accent-dark", "accent-light"].map(
-          (name) => (
-            <li>
-              <span class="swatch" style={`background: var(--${name})`} />
-              <code>--{name}</code>
-            </li>
-          ),
-        )
-      }
-    </ul>
-  </section>
-
-  <section class="page wide check">
-    <p class="label">wide layout (1000px)</p>
-    <div class="wide-demo">
-      <div></div>
-      <div></div>
-      <div></div>
-    </div>
   </section>
 </BaseLayout>
 
@@ -56,51 +15,5 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     margin-top: 1.25rem;
     color: var(--text-muted);
     font-size: 1.125rem;
-  }
-
-  .check h2,
-  .check h3 {
-    margin-block: 0.5rem 1rem;
-  }
-
-  .check h3 {
-    margin-top: 2rem;
-  }
-
-  .swatches {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
-    gap: 0.75rem;
-    padding: 0;
-    list-style: none;
-    font-size: var(--text-sm);
-  }
-
-  .swatches li {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .swatch {
-    width: 1.5rem;
-    height: 1.5rem;
-    border: 1px solid var(--border-2);
-    border-radius: var(--radius-sm);
-    flex: none;
-  }
-
-  .wide-demo {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-    gap: 1rem;
-    margin-top: 0.75rem;
-  }
-
-  .wide-demo div {
-    height: 8rem;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
   }
 </style>

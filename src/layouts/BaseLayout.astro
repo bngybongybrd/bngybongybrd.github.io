@@ -13,11 +13,13 @@ import "../styles/base.css";
 interface Props {
   title?: string;
   description?: string;
+  // true for pages search engines should skip (e.g. /dev/).
+  noindex?: boolean;
 }
 
-const { title, description = siteDescription } = Astro.props;
-// "work · Name" on inner pages, just the name on the home page.
-const fullTitle = title ? `${title} · ${siteName}` : siteName;
+const { title, description = siteDescription, noindex = false } = Astro.props;
+// "work — Name" on inner pages, just the name on the home page.
+const fullTitle = title ? `${title} — ${siteName}` : siteName;
 ---
 
 <!doctype html>
@@ -27,6 +29,7 @@ const fullTitle = title ? `${title} · ${siteName}` : siteName;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
     <!--
