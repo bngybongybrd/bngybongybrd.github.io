@@ -1,5 +1,29 @@
 ---
+// Placeholder until Stage 2 (globe + trip cards). For now it lists each trip
+// as a plain link, generated from the trips collection.
+import { getCollection } from "astro:content";
 import PlaceholderPage from "../../components/PlaceholderPage.astro";
+
+const trips = (await getCollection("trips")).sort(
+  (a, b) => b.data.dates.start.getTime() - a.data.dates.start.getTime(),
+);
 ---
 
-<PlaceholderPage title="places" stage="2" />
+<PlaceholderPage title="places" stage="2">
+  <ul class="trips">
+    {
+      trips.map((trip) => (
+        <li>
+          <a href={`/places/${trip.id}/`}>{trip.data.title}</a>
+        </li>
+      ))
+    }
+  </ul>
+</PlaceholderPage>
+
+<style>
+  .trips {
+    margin-top: 1.5rem;
+    padding-left: 1.2rem;
+  }
+</style>

@@ -1,0 +1,119 @@
+---
+// Sticky row of day chips. Each chip is a plain link to #day-N, so it works
+// without JavaScript. With JavaScript, the chip for the day you're reading is
+// highlighted ("scrollspy").
+interface Props {
+  days: number[];
+}
+
+const { days } = Astro.props;
+---
+
+<nav class="day-index" aria-label="Days">
+  <ol>
+    {
+      days.map((day) => (
+        <li>
+          <a href={`#day-${day}`} data-day={day}>
+            Day {day}
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  .day-index {
+    position: sticky;
+    top: var(--nav-height); /* sits just under the site nav */
+    z-index: 5;
+    margin-top: 3.5rem;
+    margin-inline: calc(-1 * var(--gutter)); /* full width under the nav */
+    padding-inline: var(--gutter);
+    background: var(--bg); /* solid: text scrolling underneath shouldn't show through */
+    border-bottom: 1px solid var(--border);
+  }
+
+  ol {
+    display: flex;
+    gap: 0.5rem;
+    /* Centred when the chips fit; scrolls sideways from the left when they
+       don't (max-content + auto margins avoids clipping the first chip). */
+    width: max-content;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0.75rem 0;
+    list-style: none;
+    /* On narrow screens the chips scroll sideways instead of wrapping. */
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  ol::-webkit-scrollbar {
+    display: none;
+  }
+
+  a {
+    display: block;
+    padding: 0.3rem 0.85rem;
+    font-size: var(--text-sm);
+    white-space: nowrap;
+    text-decoration: none;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition:
+      color var(--transition),
+      border-color var(--transition),
+      background-color var(--transition);
+  }
+
+  a:hover {
+    color: var(--text);
+    border-color: var(--border-2);
+  }
+
+  /* The day currently in view (set by the script below). */
+  a[aria-current="location"] {
+    color: var(--accent-dark);
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+</style>
+
+<script>
+  // Scrollspy: watch each day section and mark its chip while it's in view.
+  const chips = new Map<string, HTMLAnchorElement>();
+  document.querySelectorAll<HTMLAnchorElement>(".day-index a").forEach((chip) => {
+    chips.set(`day-${chip.dataset.day}`, chip);
+  });
+
+  function setCurrent(id: string) {
+    chips.forEach((chip, key) => {
+      if (key === id) {
+        chip.setAttribute("aria-current", "location");
+        // Keep the active chip visible in the sideways-scrolling row on phones.
+        chip.scrollIntoView({ block: "nearest", inline: "nearest" });
+      } else {
+        chip.removeAttribute("aria-current");
+      }
+    });
+  }
+
+  // A section counts as "current" when it crosses a thin line 35% down the
+  // screen. rootMargin shrinks the watched area to that line.
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) setCurrent(entry.target.id);
+      }
+    },
+    { rootMargin: "-35% 0px -64% 0px" },
+  );
+
+  chips.forEach((_, id) => {
+    const section = document.getElementById(id);
+    if (section) observer.observe(section);
+  });
+</script>

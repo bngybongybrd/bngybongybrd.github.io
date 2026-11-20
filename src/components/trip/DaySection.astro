@@ -1,0 +1,72 @@
+---
+// One day of a trip, opened like a chapter: "Day 2", the title, the date,
+// all centred. Then the day's writing and media exactly as written.
+import { render, type CollectionEntry } from "astro:content";
+import { formatDayDate, isoDay } from "../../lib/format";
+
+interface Props {
+  entry: CollectionEntry<"days">;
+}
+
+const { entry } = Astro.props;
+const { day, date, title } = entry.data;
+// render() turns the Markdown into HTML, running our remark/rehype plugins.
+const { Content } = await render(entry);
+---
+
+<section class="day" id={`day-${day}`} aria-labelledby={`day-${day}-title`}>
+  <header class="day-head">
+    <p class="day-number">Day {day}</p>
+    <h2 id={`day-${day}-title`}>{title}</h2>
+    <p class="day-date"><time datetime={isoDay(date)}>{formatDayDate(date)}</time></p>
+  </header>
+
+  <div class="prose">
+    <Content />
+  </div>
+
+  <p class="back-to-top"><a href="#trip-top">↑ back to top</a></p>
+</section>
+
+<style>
+  .day {
+    padding-top: clamp(4rem, 3rem + 4vw, 7rem);
+  }
+
+  .day-head {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .day-number {
+    font-size: var(--text-sm);
+    color: var(--accent-dark);
+    letter-spacing: 0.04em;
+  }
+
+  h2 {
+    margin-top: 0.4rem;
+    font-size: clamp(1.875rem, 1.4rem + 2vw, 2.75rem);
+  }
+
+  .day-date {
+    margin-top: 0.6rem;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+
+  .back-to-top {
+    margin-top: 3rem;
+    text-align: center;
+    font-size: var(--text-sm);
+  }
+
+  .back-to-top a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .back-to-top a:hover {
+    color: var(--text);
+  }
+</style>

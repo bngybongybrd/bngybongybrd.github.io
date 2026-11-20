@@ -1,0 +1,36 @@
+---
+// The trip in one quiet line under the title: "10 days   7 stops   Yubeng hike".
+// A plain line reads as part of the story; big numbers with labels would read
+// like a dashboard.
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  trip: CollectionEntry<"trips">;
+}
+
+const { stats, stops } = Astro.props.trip.data;
+
+const facts = [
+  `${stats.days} days`,
+  stops.length ? `${stops.length} stops` : null,
+  stats.highlight ?? null,
+].filter((fact) => fact !== null);
+---
+
+<ul class="stats" aria-label="Trip at a glance">
+  {facts.map((fact) => <li>{fact}</li>)}
+</ul>
+
+<style>
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem 2.25rem;
+    margin: 2.5rem auto 0;
+    padding: 0 var(--gutter);
+    list-style: none;
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+  }
+</style>

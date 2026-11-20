@@ -24,7 +24,7 @@ Then open <http://localhost:4321>. The page reloads as you edit files.
 npm run build
 ```
 
-The finished site goes into `dist/`. To look at that exact build:
+Before building, `scripts/sync-videos.mjs` copies trip videos into `public/trips/`, and `scripts/check-exif.mjs` warns if any photo or video contains location data (run it alone with `npm run check:exif`). The finished site goes into `dist/`. To look at that exact build:
 
 ```bash
 npm run preview
@@ -46,5 +46,9 @@ One-time setup: repo **Settings → Pages → Source: GitHub Actions**.
 | `src/layouts/BaseLayout.astro` | The page shell: `<head>`, nav, content, now strip, footer |
 | `src/components/` | Nav, theme toggle, now strip, footer, placeholder page |
 | `src/pages/` | One file per URL |
-| `public/` | Files copied as-is (favicon) |
+| `src/content/trips/<trip>/` | A trip: `trip.yaml`, `intro.md`, `day-NN.md`, `notes.md`, `media/` |
+| `src/content.config.ts` | What fields each content file must have |
+| `src/plugins/` | Markdown plugins: photo grids, `[photo-only]`, videos, badges, notes cards, Chinese text |
+| `scripts/` | `sync-videos.mjs` and `check-exif.mjs`, run automatically before dev/build |
+| `public/` | Files copied as-is (favicon; generated video copies in `public/trips/`) |
 | `astro.config.mjs` | Site URL and fonts |

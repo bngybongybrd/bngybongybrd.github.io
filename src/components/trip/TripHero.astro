@@ -1,0 +1,163 @@
+---
+// Top of a trip page.
+// With a hero photo: the photo runs edge to edge and the title sits over its
+// lower part, on a soft dark fade so the text stays readable on any photo.
+// Without one: the title alone opens the page, centred, with no empty box.
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { formatRange, isoDay } from "../../lib/format";
+
+interface Props {
+  trip: CollectionEntry<"trips">;
+}
+
+const { trip } = Astro.props;
+const { title, subtitle, dates, hero } = trip.data;
+// Mark a Chinese subtitle (e.g. 云南) so it gets proper CJK glyphs and fonts.
+const subtitleLang = subtitle && /\p{Script=Han}/u.test(subtitle) ? "zh-Hans" : undefined;
+---
+
+<header class:list={["trip-hero", { "has-image": hero }]} id="trip-top">
+  <p class="back"><a href="/places/">← All places</a></p>
+
+  {
+    hero && (
+      // The first thing on the page: load it right away, not lazily.
+      // alt="" because the title over it already says what it is.
+      <Image
+        class="hero-image"
+        src={hero}
+        alt=""
+        layout="full-width"
+        loading="eager"
+        fetchpriority="high"
+      />
+    )
+  }
+
+  <div class="hero-text">
+    <h1>{title}</h1>
+    {subtitle && <p class="subtitle" lang={subtitleLang}>{subtitle}</p>}
+    <p class="dates">
+      <time datetime={isoDay(dates.start)}>{formatRange(dates.start, dates.end)}</time>
+    </p>
+  </div>
+</header>
+
+<style>
+  .trip-hero {
+    position: relative;
+    text-align: center;
+  }
+
+  /* --- Back link: top-left, aligned with the site's left edge --- */
+
+  .back {
+    max-width: calc(var(--wide-width) + 2 * var(--gutter));
+    margin-inline: auto;
+    padding: 1.25rem var(--gutter) 0;
+    text-align: left;
+    font-size: var(--text-sm);
+  }
+
+  .back a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .back a:hover {
+    color: var(--text);
+  }
+
+  /* On a photo: a small dark pill, readable on a bright sky. */
+  .has-image .back {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .has-image .back a {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    color: #faf9f6;
+    background: rgb(20 19 17 / 0.45);
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .has-image .back a:hover {
+    background: rgb(20 19 17 / 0.6);
+  }
+
+  /* --- Without a photo: title block only --- */
+
+  .hero-text {
+    padding: clamp(3rem, 2rem + 5vw, 6rem) var(--gutter) 0;
+  }
+
+  h1 {
+    font-size: clamp(3rem, 2rem + 5vw, 5.5rem);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1;
+  }
+
+  .subtitle {
+    margin-top: 0.6rem;
+    font-size: clamp(1.375rem, 1.1rem + 1vw, 1.875rem);
+    color: var(--text-muted);
+    letter-spacing: 0.08em; /* a little air between the characters */
+  }
+
+  .dates {
+    margin-top: 1rem;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+  }
+
+  /* --- With a photo: full-bleed image, text over its lower part --- */
+
+  .has-image {
+    height: min(88vh, 820px);
+    min-height: 420px;
+    overflow: hidden;
+    color: #faf9f6; /* always light on a photo, in both themes */
+  }
+
+  .hero-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* The fade: dark at the bottom where the title sits, clear at the top.
+     It's there for legibility, not decoration: white text needs a dark
+     enough background whatever the photo looks like. */
+  .has-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(20 19 17 / 0.72) 0%, rgb(20 19 17 / 0.28) 38%, transparent 62%);
+    pointer-events: none;
+  }
+
+  .has-image .hero-text {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 var(--gutter) clamp(2.5rem, 1.5rem + 4vw, 4.5rem);
+  }
+
+  .has-image .subtitle,
+  .has-image .dates {
+    color: rgb(250 249 246 / 0.85);
+  }
+</style>

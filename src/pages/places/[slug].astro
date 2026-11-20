@@ -1,0 +1,96 @@
+---
+// One page per trip, e.g. /places/yunnan-2026/.
+// getStaticPaths() tells Astro which pages to build: one for every trip.yaml,
+// so adding a trip folder adds a page with no code changes.
+import { getCollection, getEntry, render, type CollectionEntry } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TripHero from "../../components/trip/TripHero.astro";
+import StatsBar from "../../components/trip/StatsBar.astro";
+import DayIndex from "../../components/trip/DayIndex.astro";
+import DaySection from "../../components/trip/DaySection.astro";
+import TripNotes from "../../components/trip/TripNotes.astro";
+import "../../styles/trip.css";
+
+export async function getStaticPaths() {
+  const trips = await getCollection("trips");
+  return trips.map((trip) => ({ params: { slug: trip.id }, props: { trip } }));
+}
+
+interface Props {
+  trip: CollectionEntry<"trips">;
+}
+
+const { trip } = Astro.props;
+
+// This trip's days, in order. Day ids look like "yunnan-2026/day-02".
+const days = (await getCollection("days", (entry) => entry.id.startsWith(`${trip.id}/`))).sort(
+  (a, b) => a.data.day - b.data.day,
+);
+
+// intro.md and notes.md are optional.
+const intro = await getEntry("tripText", `${trip.id}/intro`);
+const notes = await getEntry("tripText", `${trip.id}/notes`);
+const Intro = intro ? (await render(intro)).Content : null;
+---
+
+<BaseLayout title={trip.data.title} description={trip.data.summary}>
+  <TripHero trip={trip} />
+
+  <article class="trip">
+    <StatsBar trip={trip} />
+
+    {/* Stage 1b: the overview map goes here (MapLibre, under the stats bar). */}
+
+    {
+      Intro && (
+        <div class="prose intro">
+          <Intro />
+        </div>
+      )
+    }
+
+    <DayIndex days={days.map((d) => d.data.day)} />
+
+    {days.map((entry) => <DaySection entry={entry} />)}
+
+    {notes && <TripNotes entry={notes} />}
+  </article>
+</BaseLayout>
+
+<style>
+  /* The story column is centred on the page (see trip.css for widths). */
+  .trip {
+    padding-inline: var(--gutter);
+  }
+
+  .intro {
+    margin-top: 3.5rem;
+    font-size: 1.125rem;
+  }
+</style>
+
+<script>
+  // Trip videos: written with `controls` so they work without JavaScript.
+  // Here we turn them into quiet, looping clips that play only while on
+  // screen, unless the reader prefers reduced motion (then: poster + controls).
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!reduceMotion) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const video = entry.target as HTMLVideoElement;
+          if (entry.isIntersecting) video.play().catch(() => {});
+          else video.pause();
+        }
+      },
+      { threshold: 0.4 },
+    );
+
+    document.querySelectorAll<HTMLVideoElement>("video.trip-video").forEach((video) => {
+      video.controls = false;
+      video.muted = true; // browsers only autoplay muted video
+      observer.observe(video);
+    });
+  }
+</script>
