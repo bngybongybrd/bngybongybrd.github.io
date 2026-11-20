@@ -126,11 +126,21 @@ pre {
 
 /* --- Layout containers --- */
 
+/*
+  The reading column shares its left edge with the nav, now strip and footer:
+  the container is as wide as .wide, but each child stops at the reading
+  width, leaving the right side open. One left edge everywhere keeps the
+  page calm and aligned.
+*/
 .reading {
   width: 100%;
-  max-width: calc(var(--reading-width) + 2 * var(--gutter));
+  max-width: calc(var(--wide-width) + 2 * var(--gutter));
   margin-inline: auto;
   padding-inline: var(--gutter);
+}
+
+.reading > * {
+  max-width: var(--reading-width);
 }
 
 .wide {

@@ -7,7 +7,7 @@
 - **Self-hosted fonts**: Lora, DM Sans and JetBrains Mono, served from the site itself.
 - A **theme toggle** that remembers your choice and never flashes the wrong theme.
 - The **site chrome** shared by every page: sticky nav (with a mobile menu), the "right now" strip and the footer.
-- A **temporary home page** that shows the fonts, colours and widths, and one-line **placeholder pages** for every nav link.
+- A **temporary home page**, one-line **placeholder pages** for every nav link, and a hidden **`/dev/` layout check** page that shows the fonts, colours and widths (marked `noindex` so search engines skip it).
 - A **GitHub Actions workflow** that builds and publishes the site whenever `main` changes.
 
 ## How a page gets made
@@ -44,6 +44,10 @@ There are three layers:
    - `is:inline` matters. Normally Astro turns `<script>` into a deferred module, which runs *after* the page is drawn and is too late for this job. `is:inline` leaves it exactly where it is.
    - `try/catch` matters too. Some browsers block storage (private mode). Then the script quietly does nothing and the CSS layer takes over.
 3. **The toggle button** (`ThemeToggle.astro`) flips the theme, saves it, and updates `aria-pressed` so screen readers know whether "Dark theme" is on. It is hidden until JavaScript runs, because a button that does nothing is worse than no button.
+
+### One shared left edge
+
+The nav name, page headings, body text, now strip and footer all start at the same left edge. In `base.css`, `.reading` is as wide as `.wide` (1000px), but every direct child is capped at the reading width (`.reading > * { max-width: 680px }`). Text keeps a comfortable line length, and the extra space sits on the right instead of being split on both sides.
 
 ### Progressive enhancement (the mobile menu)
 
