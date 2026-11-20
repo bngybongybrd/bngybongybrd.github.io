@@ -1,0 +1,61 @@
+---
+// One day of a trip: a small date line, the title, then the day's writing
+// and media exactly as written, then a link back to the top.
+import { render, type CollectionEntry } from "astro:content";
+import { formatDayDate, isoDay } from "../../lib/format";
+
+interface Props {
+  entry: CollectionEntry<"days">;
+}
+
+const { entry } = Astro.props;
+const { day, date, title } = entry.data;
+// render() turns the Markdown into HTML, running our remark/rehype plugins.
+const { Content } = await render(entry);
+---
+
+<section class="day" id={`day-${day}`} aria-labelledby={`day-${day}-title`}>
+  <p class="day-meta">
+    Day {day}, <time datetime={isoDay(date)}>{formatDayDate(date)}</time>
+  </p>
+  <h2 id={`day-${day}-title`}>{title}</h2>
+
+  <div class="prose">
+    <Content />
+  </div>
+
+  <p class="back-to-top"><a href="#trip-top">↑ back to top</a></p>
+</section>
+
+<style>
+  .day {
+    padding-top: 4rem;
+  }
+
+  .day-meta {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+
+  h2 {
+    margin-top: 0.35rem;
+  }
+
+  .prose {
+    margin-top: 1.75rem;
+  }
+
+  .back-to-top {
+    margin-top: 2.5rem;
+    font-size: var(--text-sm);
+  }
+
+  .back-to-top a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  .back-to-top a:hover {
+    color: var(--text);
+  }
+</style>

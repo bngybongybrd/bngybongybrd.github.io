@@ -1,0 +1,83 @@
+---
+// Top of a trip page: the wide photo, then the title, subtitle and dates
+// below it. Text never sits on top of the photo (PLAN.md section 6).
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { formatRange, isoDay } from "../../lib/format";
+
+interface Props {
+  trip: CollectionEntry<"trips">;
+}
+
+const { trip } = Astro.props;
+const { title, subtitle, dates, hero } = trip.data;
+// Mark a Chinese subtitle (e.g. 云南) so it gets proper CJK glyphs and fonts.
+const subtitleLang = subtitle && /\p{Script=Han}/u.test(subtitle) ? "zh-Hans" : undefined;
+---
+
+<header class="trip-hero">
+  {
+    hero ? (
+      // The first thing on the page: load it right away, not lazily.
+      <Image
+        class="hero-image"
+        src={hero}
+        alt=""
+        layout="full-width"
+        loading="eager"
+        fetchpriority="high"
+      />
+    ) : (
+      // No hero chosen yet: a quiet empty frame keeps the layout honest.
+      <div class="hero-placeholder">[PLACEHOLDER: hero photo]</div>
+    )
+  }
+
+  <div class="hero-text">
+    <h1>{title}</h1>
+    {subtitle && <p class="subtitle" lang={subtitleLang}>{subtitle}</p>}
+    <p class="dates">
+      <time datetime={isoDay(dates.start)}>{formatRange(dates.start, dates.end)}</time>
+    </p>
+  </div>
+</header>
+
+<style>
+  .hero-image,
+  .hero-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    max-height: 70vh;
+    object-fit: cover;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+  }
+
+  /* Until a photo is chosen: a short band, so an empty box doesn't fill the screen. */
+  .hero-placeholder {
+    aspect-ratio: auto;
+    height: 9rem;
+    display: grid;
+    place-items: center;
+    background: var(--surface);
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+  }
+
+  .hero-text {
+    margin-top: 2rem;
+  }
+
+  .subtitle {
+    margin-top: 0.25rem;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+  }
+
+  .dates {
+    margin-top: 0.75rem;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+  }
+</style>

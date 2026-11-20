@@ -1,0 +1,220 @@
+/*
+  Styles for trip content that comes from Markdown (photos, videos, badges,
+  notes cards). Component <style> blocks are scoped and can't reach HTML that
+  Markdown produces, so these rules live in this ordinary stylesheet, imported
+  only by the trip page.
+*/
+
+/* --- Reading column ------------------------------------------------------
+   Text stops at the reading width; [photo-only] blocks may use the full
+   wide layout. Both share the same left edge as the rest of the site. */
+
+.prose > * {
+  max-width: var(--reading-width);
+}
+
+.prose > .photo-only {
+  max-width: var(--wide-width);
+}
+
+.prose > * + * {
+  margin-top: 1.1em;
+}
+
+/* --- Photo groups ------------------------------------------------------- */
+
+.media-group,
+.photo-only {
+  margin-block: 2rem;
+}
+
+.photo-only {
+  display: grid;
+  gap: 0.5rem;
+  margin-block: 2.75rem;
+}
+
+.photo-only > .media-group {
+  margin-block: 0;
+}
+
+.media-group {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.media {
+  margin: 0;
+  min-width: 0;
+  min-height: 0;
+}
+
+.media img,
+.media video {
+  display: block;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  transition: opacity var(--transition);
+}
+
+.media img:hover {
+  opacity: 0.94;
+}
+
+/* In multi-photo groups every cell fills its grid area; photos are cropped
+   slightly (object-fit: cover) so the edges line up. */
+.media-3 .media {
+  display: flex;
+  flex-direction: column;
+}
+
+.media-2 img,
+.media-3 img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex: 1;
+  object-fit: cover;
+}
+
+/* One photo on its own: shown whole. Tall (portrait) photos are capped at
+   most of the screen height so one photo doesn't fill several screens. */
+.media-1 img {
+  width: auto;
+  max-width: 100%;
+  max-height: min(85vh, 860px);
+}
+
+/* Two side by side, alternating which side is wider between groups.
+   Two rows: photos, then captions. Each figure spans both rows and shares
+   them with its neighbour (subgrid), so a caption under one photo doesn't
+   make that photo shorter than the other. */
+.media-2 {
+  grid-template-columns: 1.4fr 1fr;
+  grid-template-rows: 1fr auto;
+  row-gap: 0;
+  aspect-ratio: 3 / 2;
+}
+
+.media-2 > .media {
+  display: grid;
+  grid-row: span 2;
+  grid-template-rows: subgrid;
+}
+
+.media-2.flip {
+  grid-template-columns: 1fr 1.4fr;
+}
+
+/* Bento: one large on the left, two stacked on the right. */
+.media-3 {
+  grid-template-columns: 1.6fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  aspect-ratio: 4 / 3;
+}
+
+.media-3 > .media:first-child {
+  grid-row: span 2;
+}
+
+/* Wider [photo-only] blocks get a slightly flatter shape. */
+.photo-only .media-2 {
+  aspect-ratio: 16 / 9;
+}
+
+.photo-only .media-3 {
+  aspect-ratio: 3 / 2;
+}
+
+/* Captions: small and quiet, only where you wrote one. */
+.media figcaption {
+  margin-top: 0.5rem;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/* --- Video -------------------------------------------------------------- */
+
+.media-video video {
+  width: auto;
+  max-width: 100%;
+  max-height: min(85vh, 860px);
+  background: var(--surface);
+}
+
+/* --- Badges ------------------------------------------------------------- */
+
+.badge-row {
+  margin-block: 1.25rem;
+}
+
+.badge {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.6rem;
+  padding: 0.3rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.badge-type {
+  color: var(--accent-dark);
+  text-transform: lowercase;
+}
+
+.badge-detail {
+  color: var(--text-muted);
+}
+
+/* --- Trip notes cards (native <details>, no JavaScript) ------------------ */
+
+.note-card {
+  max-width: var(--reading-width);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  transition: border-color var(--transition);
+}
+
+.note-card:hover {
+  border-color: var(--border-2);
+}
+
+.note-card summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.1rem;
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  cursor: pointer;
+  list-style: none; /* hide the default triangle; we draw a plus/minus */
+}
+
+.note-card summary::-webkit-details-marker {
+  display: none;
+}
+
+.note-card summary::after {
+  content: "+";
+  font-family: var(--font-body);
+  color: var(--text-muted);
+}
+
+.note-card[open] summary::after {
+  content: "−";
+}
+
+.note-card-body {
+  padding: 0 1.1rem 1.1rem;
+}
+
+.note-card-body > * + * {
+  margin-top: 1em;
+}

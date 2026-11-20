@@ -1,5 +1,9 @@
 // Astro configuration. Docs: https://docs.astro.build/en/reference/configuration-reference/
 import { defineConfig, fontProviders } from "astro/config";
+import { unified } from "@astrojs/markdown-remark";
+import remarkTripMedia from "./src/plugins/remark-trip-media.mjs";
+import remarkNotesCards from "./src/plugins/remark-notes-cards.mjs";
+import rehypeZhHans from "./src/plugins/rehype-zh-hans.mjs";
 
 // --- Fonts ---------------------------------------------------------------
 // The font files come from the @fontsource-variable packages (installed by
@@ -45,6 +49,29 @@ export default defineConfig({
   // The live URL. No `base` is needed: this repo uses the special
   // <username>.github.io name, so the site lives at the domain root.
   site: "https://bngybongybrd.github.io",
+
+  // --- Markdown ----------------------------------------------------------
+  // The Unified (remark → rehype) processor, so we can add our own plugins.
+  // remark plugins change the Markdown tree; rehype plugins change the HTML
+  // tree. See docs/stage-1.md for how each plugin works.
+  markdown: {
+    processor: unified({
+      remarkPlugins: [remarkTripMedia, remarkNotesCards],
+      rehypePlugins: [rehypeZhHans],
+      // Smart punctuation at render time: "quotes" → “quotes”, -- → –,
+      // ... → …. The Markdown files themselves are never changed.
+      smartypants: true,
+    }),
+  },
+
+  // --- Images ------------------------------------------------------------
+  // Every local image (including ones written in Markdown) is converted to
+  // WebP in several sizes with a srcset, gets width/height (no layout jump)
+  // and is lazy-loaded.
+  image: {
+    layout: "constrained",
+    responsiveStyles: true,
+  },
 
   fonts: [
     {

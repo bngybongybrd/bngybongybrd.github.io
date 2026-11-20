@@ -14,6 +14,8 @@ const { title, stage } = Astro.props;
   <section class="page reading">
     <h1>{title}</h1>
     <p class="note">[PLACEHOLDER] This page arrives in Stage {stage}.</p>
+    <!-- Optional extra content from the page using this component. -->
+    <slot />
   </section>
 </BaseLayout>
 

@@ -1,0 +1,56 @@
+---
+// A quiet row of facts under the hero: duration, stops, highlight.
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  trip: CollectionEntry<"trips">;
+}
+
+const { stats, stops } = Astro.props.trip.data;
+
+// <dl> (description list) pairs each value with its label for screen readers.
+const items = [
+  { label: "days", value: stats.days },
+  { label: "stops", value: stops.length },
+  stats.highlight ? { label: "highlight", value: stats.highlight } : null,
+].filter((item) => item !== null);
+---
+
+<dl class="stats">
+  {
+    items.map((item) => (
+      <div>
+        <dt>{item.label}</dt>
+        <dd>{item.value}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 3rem;
+    margin: 2rem 0 0;
+    padding: 1.25rem 0;
+    border-block: 1px solid var(--border);
+  }
+
+  /* Label below the value, both small and calm. */
+  .stats div {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  dt {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+
+  dd {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 1.375rem;
+  }
+</style>
