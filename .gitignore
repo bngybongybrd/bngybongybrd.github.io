@@ -1,0 +1,18 @@
+# Build output
+dist/
+
+# Astro's generated types and cache
+.astro/
+
+# Installed packages (recreated by `npm install` from package-lock.json)
+node_modules/
+
+# Logs and editor/OS clutter
+npm-debug.log*
+.DS_Store
+.vscode/
+.idea/
+
+# Local environment files (never commit secrets)
+.env
+.env.*

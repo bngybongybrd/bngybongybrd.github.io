@@ -1,0 +1,54 @@
+---
+// Minimal footer: name and year on the left, three links on the right.
+import { siteName, socialLinks } from "../config";
+
+// The year is filled in when the site is built.
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="inner wide">
+    <p>{siteName} © {year}</p>
+    <ul>
+      {
+        socialLinks.map((link) => (
+          <li>
+            <a href={link.href}>{link.label}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border);
+  }
+
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    padding-block: 1.25rem 1.75rem;
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+  }
+
+  ul {
+    display: flex;
+    gap: 1.25rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--text);
+  }
+</style>

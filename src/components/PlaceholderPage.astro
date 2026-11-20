@@ -1,0 +1,25 @@
+---
+// Stand-in for pages that later stages build, so every nav link works now.
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+interface Props {
+  title: string;
+  stage: string;
+}
+
+const { title, stage } = Astro.props;
+---
+
+<BaseLayout title={title}>
+  <section class="page reading">
+    <h1>{title}</h1>
+    <p class="note">[PLACEHOLDER] This page arrives in Stage {stage}.</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .note {
+    margin-top: 1rem;
+    color: var(--text-muted);
+  }
+</style>

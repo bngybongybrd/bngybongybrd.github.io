@@ -1,0 +1,74 @@
+---
+// The shell every page uses: <head>, nav, the page's own content, now strip, footer.
+// A page passes its title and description; the content goes where <slot /> is.
+import { Font } from "astro:assets";
+import { siteName, siteDescription } from "../config";
+import Nav from "../components/Nav.astro";
+import NowStrip from "../components/NowStrip.astro";
+import Footer from "../components/Footer.astro";
+// Importing CSS here makes Astro bundle it into every page that uses this layout.
+import "../styles/tokens.css";
+import "../styles/base.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = siteDescription } = Astro.props;
+// "work · Name" on inner pages, just the name on the home page.
+const fullTitle = title ? `${title} · ${siteName}` : siteName;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <!--
+      Runs before anything is drawn, so a saved theme is applied on the very
+      first paint (no flash). `is:inline` tells Astro to leave this script
+      exactly here instead of bundling it into a deferred module.
+    -->
+    <script is:inline>
+      (function () {
+        var root = document.documentElement;
+        // Lets CSS know JavaScript is running (used by the mobile menu and theme toggle).
+        root.classList.add("js");
+        try {
+          var saved = localStorage.getItem("theme");
+          if (saved === "light" || saved === "dark") {
+            root.setAttribute("data-theme", saved);
+          }
+        } catch (error) {
+          // Storage can be blocked (private mode, strict settings). Then we
+          // simply follow the system theme, which the CSS already does.
+        }
+      })();
+    </script>
+
+    <!--
+      Fonts from astro.config.mjs. Preloading tells the browser to fetch a file
+      right away instead of waiting to discover it in the CSS. We only do that
+      for the body font (upright), since it covers most of every page. Lora and
+      italics load as soon as they're needed; Astro's size-matched fallback
+      keeps text from jumping while they arrive.
+    -->
+    <Font cssVariable="--font-dm-sans" preload={[{ style: "normal" }]} />
+    <Font cssVariable="--font-lora" />
+    <Font cssVariable="--font-jetbrains-mono" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Nav />
+    <main id="main">
+      <slot />
+    </main>
+    <NowStrip />
+    <Footer />
+  </body>
+</html>

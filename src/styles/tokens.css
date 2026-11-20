@@ -1,0 +1,92 @@
+/*
+  Design tokens: every colour, size and radius the site uses, in one place.
+  Components use these through var(--name), never raw values, so changing a
+  token here changes it everywhere. Values come from PLAN.md section 4.
+*/
+
+:root {
+  /* Light theme is the default. */
+  color-scheme: light;
+
+  --bg: #faf9f6;
+  --surface: #f2f0eb;
+  --surface-2: #eae7e0;
+  --border: #e2dfd8;
+  --border-2: #d0ccc3;
+  --text: #2c2b28;
+  /* Darkened from PLAN.md's #7A7870 (4.20:1) to pass 4.5:1 on --bg. */
+  --text-muted: #6e6c64;
+  /* Only for non-essential metadata: it is below 4.5:1 on purpose. */
+  --text-faint: #aba99f;
+  /* Darkened from PLAN.md's #7A9E7E (2.84:1) to pass 3:1 for the dot and underline. */
+  --accent: #6b8f6f;
+  --accent-dark: #5a7a5e;
+  --accent-light: #ebf2ec;
+
+  /* Type. The --font-* variables are created by Astro's Fonts API
+     (see astro.config.mjs) and already include fallback fonts. */
+  --font-heading: var(--font-lora);
+  --font-body: var(--font-dm-sans);
+  --font-mono: var(--font-jetbrains-mono);
+  /* Chinese text uses fonts already on the reader's device (no CJK web font). */
+  --font-cjk: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+
+  --text-sm: 0.8125rem; /* 13px, the smallest size on the site */
+  --text-nav: 0.84375rem; /* 13.5px */
+  --text-base: 1.0625rem; /* 17px body */
+  --leading-body: 1.78;
+
+  /* Layout */
+  --reading-width: 680px;
+  --wide-width: 1000px;
+  --gutter: 1.25rem;
+  --nav-height: 62px;
+
+  /* Shape */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  /* Motion: colour and border changes only. */
+  --transition: 0.2s ease;
+}
+
+/*
+  Dark theme. The same values appear twice because two different things
+  can ask for dark:
+  1. The device is set to dark and you haven't picked light with the toggle.
+     This works even with JavaScript off.
+  2. You picked dark with the toggle (the inline script in BaseLayout sets
+     data-theme="dark" on <html>).
+*/
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #1c1b19;
+    --surface: #252421;
+    --surface-2: #2e2c28;
+    --border: #34322e;
+    --border-2: #45423d;
+    --text: #e8e6e0;
+    --text-muted: #a19f96;
+    --text-faint: #77756d;
+    --accent: #8fb594;
+    --accent-dark: #a8c9ac;
+    --accent-light: #2a332b;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #1c1b19;
+  --surface: #252421;
+  --surface-2: #2e2c28;
+  --border: #34322e;
+  --border-2: #45423d;
+  --text: #e8e6e0;
+  --text-muted: #a19f96;
+  --text-faint: #77756d;
+  --accent: #8fb594;
+  --accent-dark: #a8c9ac;
+  --accent-light: #2a332b;
+}

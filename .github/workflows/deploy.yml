@@ -1,0 +1,39 @@
+# Builds the Astro site and publishes it to GitHub Pages.
+# Based on the official guide: https://docs.astro.build/en/guides/deploy/github/
+# One-time setup: repo Settings → Pages → Source: "GitHub Actions".
+name: Deploy to GitHub Pages
+
+on:
+  # Every push to main publishes the site.
+  push:
+    branches: [main]
+  # Also lets you run it by hand from the Actions tab.
+  workflow_dispatch:
+
+# Only what's needed: read the repo, write a Pages deployment.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+      - name: Install, build, and upload the site
+        # Detects npm from package-lock.json, runs `npm run build`,
+        # and uploads dist/ as the Pages artifact. Uses Node 24 by default.
+        uses: withastro/action@v6
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
