@@ -126,11 +126,11 @@ coverAlt: Erhai Lake from the shore
 
 The photo appears under the day heading as a wide band across the whole screen, cropped to fit (so landscapes work best). Days without `cover` simply don't have one.
 
-As you scroll past, the photo moves a little slower than the page, so the band feels like a window onto the scene. This uses a **scroll-driven animation**: `animation-timeline: view()` ties the animation's progress to the band crossing the screen instead of to time, so it needs no JavaScript. Two details that bit during the build:
-- The box uses `overflow: clip`, not `hidden`. `hidden` makes the box a scroll container, and the animation then tracks that box (which never scrolls) instead of the page.
-- The animation is written as longhands (`animation-name`, `animation-timeline`…). The CSS minifier otherwise merges them into one `animation` shorthand that browsers reject.
+As you scroll past, the photo moves a little slower than the page ("drift"), so the band feels like a window onto the scene. A short script in `DaySection.astro` does it. On each scroll (at most once per frame, via `requestAnimationFrame`) it works out how far the band has crossed the screen, from 0 to 1, and sets a CSS variable `--drift` between −11% and +11%. The photo is 30% taller than the band and moved by `translate: 0 var(--drift)`.
 
-Browsers without support (Firefox for now) and readers who prefer reduced motion get a still photo.
+(A first version used CSS scroll-driven animations, which Firefox doesn't support, so it was replaced.)
+
+Without JavaScript, or with reduced motion, the photo stays still.
 
 ### Photos fade in as you scroll
 
