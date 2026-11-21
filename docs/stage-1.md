@@ -66,23 +66,23 @@ A plugin is a function that receives the tree and changes it. **remark** plugins
 2. For each paragraph it makes a list of **tokens**: `open` (`[photo-only]`), `close` (`[/photo-only]`), `media` (an image), or `content` (any real text).
 3. If a paragraph has any `content`, it's your writing, so it's left exactly as it is.
 4. Otherwise the images are collected into a **bucket**. Inside `[photo-only]`, they go into a separate collection that can span blank lines.
-5. When a group ends, `groupSizes()` splits it into groups of 3 and 2 (8 → 3+3+2) and builds wrapper nodes.
+5. When a group ends, `groupSizes()` splits it into rows of 3 and 2 (8 → 3+3+2) and builds wrapper nodes. Each photo's shape (`--ar`, width ÷ height) is read from the file with Astro's own `imageMetadata`, so the CSS can lay a row out without cropping (see below).
 6. A wrapper is a node with `data.hName`, e.g. `{ data: { hName: "figure" }, children: [image] }`. When the tree becomes HTML, it turns into `<figure>`. The image node inside is untouched, so **Astro still optimises it**. That's why we wrap rather than write HTML for photos.
 7. Videos are the exception. Astro's image pipeline can't process `.mp4`, so the plugin writes a raw `<video>` tag that points at the copy `sync-videos.mjs` made in `public/trips/`.
 
 ### The page layout: a centred story column
 
-A trip page is read top to bottom like a book, so it uses a **centred** column. The shorter index-style pages keep the shared left edge from Stage 0. There are three widths, all centred on the same axis:
+A trip page is read top to bottom like a book, so it uses a **centred** column. The shorter index-style pages keep the shared left edge from Stage 0. Text is a narrow column, photos are much wider, and one special kind of photo spans the whole screen:
 
 | What | Max width | Why |
 |---|---|---|
 | Text | 680px | Comfortable line length (about 75 characters) |
-| Runs of photos | 1240px | Photos much wider than the words, like a photo essay |
-| `[photo-only]` | 1600px | The widest moments, photos alone |
+| Photos (every run, and `[photo-only]`) | 1600px | Photos are the point, as on exposure.co |
+| `[full-width]` | the whole screen | Big scenery moments |
 
 Body text stays **left-aligned inside** its centred column. With centred paragraphs every line starts in a different place, which makes them hard to read. The day headings *are* centred, because they open each day like a chapter.
 
-On phones (700px and narrower) both photo blocks break out of the text gutter and run edge to edge.
+On phones (700px and narrower) photo runs break out of the text gutter and run edge to edge.
 
 Each run of consecutive photos (e.g. 3+3+2) is wrapped in one `.media-run` with the same small gap as inside a group, so it reads as one spread.
 
@@ -92,12 +92,28 @@ With a hero photo, the image runs edge to edge (`position: absolute; inset: 0; o
 
 (An earlier version used a dark fade over the lower part of the photo. It was removed because it dulled the image.)
 
-### How the grids look the way they do (`src/styles/trip.css`)
+### How the photo rows work, with no cropping (`src/styles/trip.css`)
 
-- **Two-up:** `grid-template-columns: 1.4fr 1fr` gives uneven widths, and `.flip` swaps them for the next pair. The group has a fixed `aspect-ratio`, and each photo uses `object-fit: cover`, so cells line up by cropping a little at the edges.
-- **Captions in a pair:** each `<figure>` spans two grid rows and shares them with its neighbour using `grid-template-rows: subgrid`. Both photos stay the same height, and the caption sits in its own row below.
-- **Bento:** the first photo gets `grid-row: span 2`, making it the tall one on the left.
-- **Single photos** aren't cropped. Most of your photos are portrait, so `max-height` keeps one photo from filling several screens.
+A row holds 1 to 3 photos. The plugin writes each photo's shape into the HTML as `--ar` (for example 0.75 for a 3:4 portrait, 1.5 for a 3:2 landscape) and the row's total as `--ar-sum`. The CSS then does two things:
+
+- **Same height, no crop:** each photo is given `flex-grow` equal to its shape. A wide photo takes a bigger share of the row and a narrow one a smaller share. The result is that every photo in the row comes out the same height, and each shows in full. (The number is multiplied by 1000 because a `flex-grow` total below 1 would leave part of the row empty.)
+- **Capped height:** the row's `max-width` is `--ar-sum × --row-max-height`, so a row is never taller than about one screen. This is why a lone portrait photo is narrower than the page: at full width it would be several screens tall.
+
+When a day mixes portrait and landscape rows, the rows therefore have different widths. That's the trade-off for never cropping.
+
+On phones, a row of three becomes one photo on top and two below, because three side by side would be tiny.
+
+### Full-width photos: `[full-width]`
+
+```md
+[full-width]
+![Erhai from the road](media/day-03/05-lake.webp "A caption, if you want one")
+[/full-width]
+```
+
+The photo spans the whole screen. It's meant for landscapes. If a photo would be taller than the screen, it is cropped a little at the top and bottom (`object-fit: cover`), which suits scenery but not portraits. Use it for horizontal scenery. Captions are allowed. Several photos in one block stack, each full width.
+
+`[photo-only]` still works, so your day 2 file is unchanged. It now looks like a normal run, except that it shows no captions.
 
 ### Scrollspy with `IntersectionObserver` (`DayIndex.astro`)
 
@@ -122,13 +138,14 @@ It uses the native `<dialog>` element. `showModal()` gives us the dark backdrop,
 ## Changes from PLAN.md (decided during the Stage 1 design review)
 
 - **Title over the hero photo**, instead of below it, with a soft text shadow for legibility and no tint over the image.
-- **Centred story column** on trip pages, with photo runs much wider than the text (photos first, as on exposure.co).
+- **Centred story column** on trip pages, with photos much wider than the text (photos first, as on exposure.co), rows that never crop, and a `[full-width]` tag for scenery.
 - **Stats as one quiet line** ("10 days   7 stops   Yubeng hike") instead of a bordered bar.
 - **No empty hero box** when there's no hero photo yet.
 - **Sticky bars are solid or nearly solid**, so text scrolling underneath doesn't show through.
 
 ## Good to know
 
+- **Layout changes in the plugin need a cache clear.** Astro remembers the rendered output of unchanged day files. After changing a plugin, delete `node_modules/.astro` once, or old days will keep the old layout.
 - **Alt-text warnings** appear when a day file is rendered. Astro caches unchanged files, so you'll see the warning after editing a day, not on every build. To see all warnings again, delete `node_modules/.astro`.
 - **After adding or renaming a video while `npm run dev` is running**, restart it so `sync-videos.mjs` copies the file.
 - **Poster naming:** a video's poster is the file in the same folder with the same number that ends in `-poster.webp`.
@@ -138,8 +155,8 @@ It uses the native `<dialog>` element. `showModal()` gives us the dark backdrop,
 
 0. **Viewer wrap-around:** in `Lightbox.astro`, `show()` wraps from the last photo to the first. Change it to stop at the ends and hide the arrow there.
 
-1. **Group sizes:** in `remark-trip-media.mjs`, change `groupSizes()` so 4 photos become one row of 4. You'll also need a `.media-4` rule in `trip.css`.
-2. **The two-up shape:** change `.media-2 { aspect-ratio: 3 / 2 }` to `4 / 3` and see how much the photos crop.
+1. **Group sizes:** in `remark-trip-media.mjs`, change `groupSizes()` so 4 photos become one row of 4. The CSS needs no change, because rows already share height by shape.
+2. **The height cap:** in `trip.css`, change `--row-max-height` to `min(70vh, 700px)` and see how much narrower the portrait rows get.
 3. **Scrollspy line:** change `rootMargin` in `DayIndex.astro` to `"-10% 0px -89% 0px"`. The highlight then switches when a day reaches the top of the screen instead of a third of the way down.
 4. **Try a badge:** add `[badge: food | Wild mushroom hotpot | Dali Ancient Town]` on its own line in a day file and watch it render as a pill.
 5. **Read the tree yourself:** add `console.log(JSON.stringify(tree.children[0], null, 2))` at the top of `transform()` in `remark-trip-media.mjs`, run `npm run build`, and look at the first node of each file. Then remove it.
