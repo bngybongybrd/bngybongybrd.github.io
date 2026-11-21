@@ -5,8 +5,11 @@ title: "Ninong to Upper Yubeng"
 mode: reading
 isHike: true
 places: [yubeng]
-cover: media/day-05/landscape.webp
 ---
+
+[full-width]
+![](media/day-05/landscape.webp)
+[/full-width]
 
 We woke up early in the morning, had our breakfast, stored some 鲜花饼 into our bags, and left the rest along with the container at the stay.
 

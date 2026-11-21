@@ -1,8 +1,6 @@
 ---
 // One day of a trip, opened like a chapter: "Day 2", the title, the date,
-// all centred. Then an optional full-width cover photo, then the day's
-// writing and media exactly as written.
-import { Image } from "astro:assets";
+// all centred. Then the day's writing and media exactly as written.
 import { render, type CollectionEntry } from "astro:content";
 import { formatDayDate, isoDay } from "../../lib/format";
 
@@ -11,7 +9,7 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { day, date, title, cover, coverAlt } = entry.data;
+const { day, date, title } = entry.data;
 // render() turns the Markdown into HTML, running our remark/rehype plugins.
 const { Content } = await render(entry);
 ---
@@ -22,14 +20,6 @@ const { Content } = await render(entry);
     <h2 id={`day-${day}-title`}>{title}</h2>
     <p class="day-date"><time datetime={isoDay(date)}>{formatDayDate(date)}</time></p>
   </header>
-
-  {
-    cover && (
-      <div class="day-cover">
-        <Image src={cover} alt={coverAlt} layout="full-width" />
-      </div>
-    )
-  }
 
   <div class="prose">
     <Content />
@@ -65,41 +55,6 @@ const { Content } = await render(entry);
     color: var(--text-muted);
   }
 
-  /* --- Cover: a wide band across the whole screen ---------------------------
-     The photo is cropped to a band (object-fit: cover). As you scroll past,
-     the script below moves the photo slower than the page ("drift"), so the
-     band feels like a window onto the scene. Without JavaScript, or for
-     readers who prefer reduced motion, the photo stays still. */
-  .day-cover {
-    position: relative;
-    height: min(75vh, 720px);
-    margin: 0 calc(-1 * var(--gutter)) 3rem; /* cancel the page gutter */
-    overflow: clip;
-  }
-
-  .day-cover :global(img) {
-    width: 100%;
-    max-width: none;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    :global(.js) .day-cover :global(img) {
-      /* 30% taller than the band, so it has room to move. */
-      position: absolute;
-      top: -15%;
-      height: 130%;
-      translate: 0 var(--drift, 0%); /* set by the script */
-    }
-  }
-
-  @media (max-width: 700px) {
-    .day-cover {
-      height: min(55vh, 420px);
-    }
-  }
-
   .back-to-top {
     margin-top: 3rem;
     text-align: center;
@@ -115,39 +70,3 @@ const { Content } = await render(entry);
     color: var(--text);
   }
 </style>
-
-<script>
-  // Cover drift: while a cover band is on screen, move its photo by up to
-  // ±11% of the photo's height in the direction you scroll, so it moves slower
-  // than the page. Runs at most once per frame (requestAnimationFrame).
-  const covers = document.querySelectorAll<HTMLElement>(".day-cover");
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  if (covers.length && !reduceMotion) {
-    let queued = false;
-
-    const update = () => {
-      queued = false;
-      for (const cover of covers) {
-        const box = cover.getBoundingClientRect();
-        if (box.bottom < 0 || box.top > window.innerHeight) continue; // off screen
-        // 0 when the band's top enters at the bottom of the screen,
-        // 1 when its bottom leaves at the top.
-        const progress = (window.innerHeight - box.top) / (window.innerHeight + box.height);
-        const drift = (progress - 0.5) * 22; // -11% … +11%
-        cover.style.setProperty("--drift", `${drift.toFixed(2)}%`);
-      }
-    };
-
-    const onScroll = () => {
-      if (!queued) {
-        queued = true;
-        requestAnimationFrame(update);
-      }
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    update();
-  }
-</script>

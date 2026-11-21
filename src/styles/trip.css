@@ -154,6 +154,30 @@
   padding-inline: var(--gutter);
 }
 
+/* The window: on wider screens the photo is pinned to the screen
+   (position: fixed) and the page scrolls past it, so the band shows a
+   different part of the photo as it moves, like a window onto the scene.
+   clip-path: inset(0) clips the pinned photo to the band's own box, so it's
+   only visible "through" the band. Phones show a normal photo (a pinned
+   landscape would be cropped to a thin slice of a tall screen), and so do
+   readers who prefer reduced motion. */
+@media (min-width: 701px) and (prefers-reduced-motion: no-preference) {
+  .full-width .media {
+    position: relative;
+    height: min(80vh, 800px);
+    clip-path: inset(0);
+  }
+
+  .full-width .media img {
+    position: fixed;
+    inset: var(--nav-height) 0 0; /* starts below the site nav */
+    width: 100%;
+    max-width: none;
+    height: calc(100vh - var(--nav-height));
+    max-height: none;
+  }
+}
+
 /* Phones: photo runs break out of the text gutter and run edge to edge,
    and a row of three becomes one wide photo above two. */
 @media (max-width: 700px) {

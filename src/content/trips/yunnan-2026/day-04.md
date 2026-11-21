@@ -5,8 +5,11 @@ title: "Monastery, scooter, Heidou cafe"
 mode: reading
 isHike: false
 places: [shangrila]
-cover: media/day-04/heidou-landscape.webp
 ---
+
+[full-width]
+![](media/day-04/heidou-landscape.webp)
+[/full-width]
 
 The day started off with a home cooked breakfast in the hotel, where we chatted with the hosts and talked to them about our itinerary. They suggested numerous more places to hike and provided some advice. 
 

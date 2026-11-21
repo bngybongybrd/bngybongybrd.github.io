@@ -113,24 +113,9 @@ On phones, a row of three becomes one photo on top and two below, because three 
 
 The photo spans the whole screen. It's meant for landscapes. If a photo would be taller than the screen, it is cropped a little at the top and bottom (`object-fit: cover`), which suits scenery but not portraits. Use it for horizontal scenery. Several photos in one block stack, each full width.
 
+**The window effect.** On screens wider than 700px, the photo is pinned to the screen with `position: fixed` and the page scrolls past it, so the band shows a different part of the photo as it moves, like a window onto the scene. The band itself has `clip-path: inset(0)`, which clips the pinned photo to the band's box, so the photo is only visible "through" the band. Phones show a normal photo, because a pinned landscape would be cropped to a thin slice of a tall screen. Readers who prefer reduced motion also get a normal photo.
+
 `[photo-only]` still works, so your day 2 file is unchanged. It now looks exactly like a normal run.
-
-### A cover photo for each day
-
-Add `cover` (and optionally `coverAlt`) to a day's front matter:
-
-```yaml
-cover: media/day-03/05-lake.webp
-coverAlt: Erhai Lake from the shore
-```
-
-The photo appears under the day heading as a wide band across the whole screen, cropped to fit (so landscapes work best). Days without `cover` simply don't have one.
-
-As you scroll past, the photo moves a little slower than the page ("drift"), so the band feels like a window onto the scene. A short script in `DaySection.astro` does it. On each scroll (at most once per frame, via `requestAnimationFrame`) it works out how far the band has crossed the screen, from 0 to 1, and sets a CSS variable `--drift` between −11% and +11%. The photo is 30% taller than the band and moved by `translate: 0 var(--drift)`.
-
-(A first version used CSS scroll-driven animations, which Firefox doesn't support, so it was replaced.)
-
-Without JavaScript, or with reduced motion, the photo stays still.
 
 ### Photos fade in as you scroll
 
@@ -167,7 +152,7 @@ It uses the native `<dialog>` element. `showModal()` gives us the dark backdrop,
 ## Changes from PLAN.md (decided during the Stage 1 design review)
 
 - **Title over the hero photo**, instead of below it, with a soft text shadow for legibility and no tint over the image.
-- **Centred story column** on trip pages, with photos much wider than the text (photos first, as on exposure.co), rows that never crop, and a `[full-width]` tag for scenery.
+- **Centred story column** on trip pages, with photos much wider than the text (photos first, as on exposure.co), rows that never crop, and a `[full-width]` tag for scenery shown as a fixed "window".
 - **Stats as one quiet line** ("10 days   7 stops   Yubeng hike") instead of a bordered bar.
 - **No empty hero box** when there's no hero photo yet.
 - **Sticky bars are solid or nearly solid**, so text scrolling underneath doesn't show through.
