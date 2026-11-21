@@ -115,6 +115,23 @@ The photo spans the whole screen. It's meant for landscapes. If a photo would be
 
 `[photo-only]` still works, so your day 2 file is unchanged. It now looks exactly like a normal run.
 
+### A cover photo for each day
+
+Add `cover` (and optionally `coverAlt`) to a day's front matter:
+
+```yaml
+cover: media/day-03/05-lake.webp
+coverAlt: Erhai Lake from the shore
+```
+
+The photo appears under the day heading as a wide band across the whole screen, cropped to fit (so landscapes work best). Days without `cover` simply don't have one.
+
+As you scroll past, the photo moves a little slower than the page, so the band feels like a window onto the scene. This uses a **scroll-driven animation**: `animation-timeline: view()` ties the animation's progress to the band crossing the screen instead of to time, so it needs no JavaScript. Two details that bit during the build:
+- The box uses `overflow: clip`, not `hidden`. `hidden` makes the box a scroll container, and the animation then tracks that box (which never scrolls) instead of the page.
+- The animation is written as longhands (`animation-name`, `animation-timeline`…). The CSS minifier otherwise merges them into one `animation` shorthand that browsers reject.
+
+Browsers without support (Firefox for now) and readers who prefer reduced motion get a still photo.
+
 ### Captions show in the photo viewer
 
 A quoted title (`![](photo.webp "Erhai from the road")`) becomes a caption that appears under the photo when it's opened in the viewer, not on the page. That keeps the photo spreads uninterrupted. The caption is still in the HTML, hidden visually but read by screen readers. Video captions stay visible under the video, since videos don't open in the viewer.

@@ -43,14 +43,18 @@ const trips = defineCollection({
 // One file per day: day-01.md, day-02.md, ... Ids look like "yunnan-2026/day-01".
 const days = defineCollection({
   loader: glob({ base: TRIPS, pattern: "*/day-*.md" }),
-  schema: z.object({
-    day: z.number(),
-    date: z.coerce.date(),
-    title: z.string(),
-    mode: z.enum(["reading", "map"]).default("reading"), // only "reading" is built
-    isHike: z.boolean().default(false),
-    places: z.array(z.string()).default([]),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      day: z.number(),
+      date: z.coerce.date(),
+      title: z.string(),
+      mode: z.enum(["reading", "map"]).default("reading"), // only "reading" is built
+      isHike: z.boolean().default(false),
+      places: z.array(z.string()).default([]),
+      // Optional wide photo that opens the day, full width under its heading.
+      cover: image().optional(),
+      coverAlt: z.string().default(""),
+    }),
 });
 
 // intro.md and notes.md: plain Markdown, no front matter needed.

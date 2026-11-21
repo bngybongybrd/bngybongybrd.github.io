@@ -1,6 +1,8 @@
 ---
 // One day of a trip, opened like a chapter: "Day 2", the title, the date,
-// all centred. Then the day's writing and media exactly as written.
+// all centred. Then an optional full-width cover photo, then the day's
+// writing and media exactly as written.
+import { Image } from "astro:assets";
 import { render, type CollectionEntry } from "astro:content";
 import { formatDayDate, isoDay } from "../../lib/format";
 
@@ -9,7 +11,7 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { day, date, title } = entry.data;
+const { day, date, title, cover, coverAlt } = entry.data;
 // render() turns the Markdown into HTML, running our remark/rehype plugins.
 const { Content } = await render(entry);
 ---
@@ -20,6 +22,14 @@ const { Content } = await render(entry);
     <h2 id={`day-${day}-title`}>{title}</h2>
     <p class="day-date"><time datetime={isoDay(date)}>{formatDayDate(date)}</time></p>
   </header>
+
+  {
+    cover && (
+      <div class="day-cover">
+        <Image src={cover} alt={coverAlt} layout="full-width" />
+      </div>
+    )
+  }
 
   <div class="prose">
     <Content />
@@ -53,6 +63,60 @@ const { Content } = await render(entry);
     margin-top: 0.6rem;
     font-size: var(--text-sm);
     color: var(--text-muted);
+  }
+
+  /* --- Cover: a wide band across the whole screen ---------------------------
+     The photo is cropped to a band (object-fit: cover). Where the browser
+     supports scroll-driven animations, the photo drifts slower than the page
+     as you scroll past, so the band feels like a window onto the scene.
+     Browsers without support, and readers who prefer reduced motion, get a
+     still photo. */
+  .day-cover {
+    position: relative;
+    height: min(75vh, 720px);
+    margin: 0 calc(-1 * var(--gutter)) 3rem; /* cancel the page gutter */
+    /* clip, not hidden: "hidden" makes this box a scroll container, and the
+       scroll-driven animation would then track it instead of the page. */
+    overflow: clip;
+  }
+
+  .day-cover :global(img) {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .day-cover :global(img) {
+        /* 20% taller than the band, so it has room to move. */
+        position: absolute;
+        top: -10%;
+        height: 120%;
+        /* Longhands on purpose: the CSS minifier would otherwise merge them into
+           an `animation` shorthand containing view(), which browsers reject. */
+        animation-name: cover-drift;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: view(); /* progress = the band crossing the screen */
+      }
+
+      @keyframes cover-drift {
+        from {
+          translate: 0 -8%;
+        }
+        to {
+          translate: 0 8%;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 700px) {
+    .day-cover {
+      height: min(55vh, 420px);
+    }
   }
 
   .back-to-top {
