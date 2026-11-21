@@ -59,7 +59,7 @@ export default defineConfig({
       // Astro remembers rendered Markdown between builds (locally and in the
       // deploy's cache) and doesn't notice when a plugin's code changes. Raise
       // `layout` whenever the plugin's HTML changes, so old output is dropped.
-      remarkPlugins: [[remarkTripMedia, { layout: 5 }], remarkNotesCards],
+      remarkPlugins: [[remarkTripMedia, { layout: 6 }], remarkNotesCards],
       rehypePlugins: [rehypeZhHans],
       // Smart punctuation at render time: "quotes" → “quotes”, -- → –,
       // ... → …. The Markdown files themselves are never changed.
