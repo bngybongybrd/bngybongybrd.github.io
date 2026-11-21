@@ -8,9 +8,9 @@
   - your intro;
   - a sticky day index;
   - the days;
-  - your trip notes as collapsible cards.
+  - your trip notes, all shown, with each `##` section as a subheading.
 - **Content collections** with schemas, so a typo in a day's front matter stops the build with a clear message instead of making a broken page.
-- **Three Markdown plugins** that arrange photos into grids, handle `[photo-only]`, captions, videos and badges, turn notes into cards, and mark Chinese text.
+- **Three Markdown plugins** that arrange photos into grids, handle `[photo-only]`, captions, videos and badges, turn the notes' `##` headings into subheadings, and mark Chinese text.
 - **Two scripts** that run before every build: `sync-videos.mjs` copies videos to where the site can serve them, and `check-exif.mjs` warns if any photo or video contains a location.
 - **Test days:** day 1 (text) and day 2 (photos). Days 3–10 load after your review.
 
@@ -23,7 +23,7 @@ day-02.md ──► content collection "days" (schema checks the front matter)
                   │ remark-parse        text → Markdown tree (mdast)
                   │ smartypants         'quotes' → ‘quotes’
                   │ remark-trip-media   images → grids, videos, badges   ◄ ours
-                  │ remark-notes-cards  (only notes.md) ## → <details>   ◄ ours
+                  │ remark-notes        (only notes.md) ## → <h3>        ◄ ours
                   │ Astro: collect image paths
                   │ remark-rehype       Markdown tree → HTML tree (hast)
                   │ rehype-zh-hans      Chinese runs → <span lang>       ◄ ours
@@ -135,9 +135,11 @@ Instead of checking the scroll position on every scroll event, which is slow, we
 
 Without JavaScript, the chips are still normal `#day-N` links that jump to each day.
 
-### Native `<details>` for notes
+### Trip notes
 
-`<details><summary>Budget</summary>…</details>` opens and closes in every browser with no JavaScript, and it's keyboard-accessible by default. We only restyle it, replacing the triangle with +/−.
+All four notes are shown in full, in the same text column as the days, under a "Trip notes" heading. The page's "Trip notes" is an `<h2>`, so `remark-notes.mjs` turns each `## Budget`-style heading in `notes.md` into an `<h3>`. That keeps the heading levels in order for screen readers, which use them to jump around a page. Your file isn't changed.
+
+(They used to be collapsible `<details>` cards. The cards came out at different widths, because a grid item with `margin-inline: auto` shrinks to fit its content, and for four short notes, showing them open reads better anyway.)
 
 ### Videos, progressive enhancement again
 
