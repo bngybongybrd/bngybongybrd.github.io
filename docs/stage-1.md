@@ -132,6 +132,10 @@ As you scroll past, the photo moves a little slower than the page, so the band f
 
 Browsers without support (Firefox for now) and readers who prefer reduced motion get a still photo.
 
+### Photos fade in as you scroll
+
+Each photo fades in as it enters the screen. It's the same scroll-driven technique as the day covers, with `animation-range: entry 0% entry 35%`: the fade starts when the photo's top edge appears and finishes once a third of it is on screen. Because it follows the scroll rather than a timer, scrolling back up fades it out again. It's only a fade, with no sliding, to keep motion calm. It's off for reduced motion and in browsers without support.
+
 ### Captions show in the photo viewer
 
 A quoted title (`![](photo.webp "Erhai from the road")`) becomes a caption that appears under the photo when it's opened in the viewer, not on the page. That keeps the photo spreads uninterrupted. The caption is still in the HTML, hidden visually but read by screen readers. Video captions stay visible under the video, since videos don't open in the viewer.
