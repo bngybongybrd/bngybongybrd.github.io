@@ -67,14 +67,14 @@
   align-items: flex-start;
   gap: 0.5rem;
   width: 100%;
-  max-width: calc(var(--ar-sum) * var(--row-max-height));
+  max-width: calc(var(--ar-sum, 1.5) * var(--row-max-height));
   margin-inline: auto;
 }
 
 .media {
   /* Scaled up so the growth factors add to well over 1: flex-grow below 1
      would leave part of the row empty instead of filling it. */
-  flex-grow: calc(var(--ar) * 1000);
+  flex-grow: calc(var(--ar, 1) * 1000);
   flex-shrink: 1;
   flex-basis: 0;
   margin: 0;
@@ -158,7 +158,7 @@
 /* --- Video -------------------------------------------------------------- */
 
 .media-video video {
-  aspect-ratio: var(--ar);
+  aspect-ratio: var(--ar, 1.78);
   background: var(--surface);
 }
 
