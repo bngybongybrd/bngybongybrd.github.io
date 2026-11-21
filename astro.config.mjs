@@ -2,7 +2,7 @@
 import { defineConfig, fontProviders } from "astro/config";
 import { unified } from "@astrojs/markdown-remark";
 import remarkTripMedia from "./src/plugins/remark-trip-media.mjs";
-import remarkNotesCards from "./src/plugins/remark-notes-cards.mjs";
+import remarkNotes from "./src/plugins/remark-notes.mjs";
 import rehypeZhHans from "./src/plugins/rehype-zh-hans.mjs";
 
 // --- Fonts ---------------------------------------------------------------
@@ -59,7 +59,7 @@ export default defineConfig({
       // Astro remembers rendered Markdown between builds (locally and in the
       // deploy's cache) and doesn't notice when a plugin's code changes. Raise
       // `layout` whenever the plugin's HTML changes, so old output is dropped.
-      remarkPlugins: [[remarkTripMedia, { layout: 6 }], remarkNotesCards],
+      remarkPlugins: [[remarkTripMedia, { layout: 7 }], remarkNotes],
       rehypePlugins: [rehypeZhHans],
       // Smart punctuation at render time: "quotes" → “quotes”, -- → –,
       // ... → …. The Markdown files themselves are never changed.

@@ -1,6 +1,6 @@
 ---
-// The trip's practical notes. notes.md's "## sections" become collapsible
-// cards (remark-notes-cards.mjs builds the <details> elements).
+// The trip's practical notes, all shown, in the same text column as the
+// days. notes.md's "## sections" become <h3> subheadings (remark-notes.mjs).
 import { render, type CollectionEntry } from "astro:content";
 
 interface Props {
@@ -12,7 +12,7 @@ const { Content } = await render(Astro.props.entry);
 
 <section class="trip-notes" aria-labelledby="trip-notes-title">
   <h2 id="trip-notes-title">Trip notes</h2>
-  <div class="notes">
+  <div class="prose notes">
     <Content />
   </div>
 </section>
@@ -27,8 +27,16 @@ const { Content } = await render(Astro.props.entry);
   }
 
   .notes {
-    display: grid;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  /* Each note's heading: a step above the text, with room before it. */
+  .notes :global(h3) {
+    margin-top: 2.25rem;
+    font-size: 1.25rem;
+  }
+
+  .notes :global(h3:first-child) {
+    margin-top: 0;
   }
 </style>
