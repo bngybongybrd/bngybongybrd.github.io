@@ -111,9 +111,13 @@ On phones, a row of three becomes one photo on top and two below, because three 
 [/full-width]
 ```
 
-The photo spans the whole screen. It's meant for landscapes. If a photo would be taller than the screen, it is cropped a little at the top and bottom (`object-fit: cover`), which suits scenery but not portraits. Use it for horizontal scenery. Captions are allowed. Several photos in one block stack, each full width.
+The photo spans the whole screen. It's meant for landscapes. If a photo would be taller than the screen, it is cropped a little at the top and bottom (`object-fit: cover`), which suits scenery but not portraits. Use it for horizontal scenery. Several photos in one block stack, each full width.
 
-`[photo-only]` still works, so your day 2 file is unchanged. It now looks like a normal run, except that it shows no captions.
+`[photo-only]` still works, so your day 2 file is unchanged. It now looks exactly like a normal run.
+
+### Captions show in the photo viewer
+
+A quoted title (`![](photo.webp "Erhai from the road")`) becomes a caption that appears under the photo when it's opened in the viewer, not on the page. That keeps the photo spreads uninterrupted. The caption is still in the HTML, hidden visually but read by screen readers. Video captions stay visible under the video, since videos don't open in the viewer.
 
 ### Scrollspy with `IntersectionObserver` (`DayIndex.astro`)
 
@@ -145,7 +149,7 @@ It uses the native `<dialog>` element. `showModal()` gives us the dark backdrop,
 
 ## Good to know
 
-- **Plugin changes need a cache bump.** Astro remembers the rendered output of unchanged day files, here and in the deploy's cache, and does not notice when a plugin changes. When a plugin's HTML changes, raise `layout` in `astro.config.mjs` (`[remarkTripMedia, { layout: 2 }]`). Without it, the live site showed new CSS with old HTML and the photos vanished.
+- **Plugin changes need a cache bump.** Astro remembers the rendered output of unchanged day files, here and in the deploy's cache, and does not notice when a plugin changes. When a plugin's HTML changes, raise `layout` in `astro.config.mjs` (e.g. `[remarkTripMedia, { layout: 3 }]`). Without it, the live site showed new CSS with old HTML and the photos vanished.
 - **Alt-text warnings** appear when a day file is rendered. Astro caches unchanged files, so you'll see the warning after editing a day, not on every build. To see all warnings again, delete `node_modules/.astro`.
 - **After adding or renaming a video while `npm run dev` is running**, restart it so `sync-videos.mjs` copies the file.
 - **Poster naming:** a video's poster is the file in the same folder with the same number that ends in `-poster.webp`.
