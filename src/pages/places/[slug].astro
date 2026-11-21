@@ -9,6 +9,7 @@ import StatsBar from "../../components/trip/StatsBar.astro";
 import DayIndex from "../../components/trip/DayIndex.astro";
 import DaySection from "../../components/trip/DaySection.astro";
 import TripNotes from "../../components/trip/TripNotes.astro";
+import Lightbox from "../../components/trip/Lightbox.astro";
 import "../../styles/trip.css";
 
 export async function getStaticPaths() {
@@ -55,6 +56,8 @@ const Intro = intro ? (await render(intro)).Content : null;
 
     {notes && <TripNotes entry={notes} />}
   </article>
+
+  <Lightbox />
 </BaseLayout>
 
 <style>

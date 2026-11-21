@@ -1,0 +1,236 @@
+---
+// Click a photo to see it large, on a dark screen, and step through the rest
+// with the arrows. Built on the native <dialog> element: showModal() gives us
+// the dark backdrop, Escape to close, focus trapping, and focus returning to
+// the photo you clicked, with no library.
+//
+// Without JavaScript nothing changes: photos are plain images and the dialog
+// stays hidden.
+---
+
+<dialog class="lightbox" aria-label="Photo viewer">
+  <button class="lb-btn lb-close" type="button" aria-label="Close">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+  </button>
+  <button class="lb-btn lb-prev" type="button" aria-label="Previous photo">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+  </button>
+  <button class="lb-btn lb-next" type="button" aria-label="Next photo">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+  </button>
+
+  <figure class="lb-figure">
+    <img class="lb-img" alt="" />
+    <figcaption class="lb-caption"></figcaption>
+  </figure>
+
+  <p class="lb-count" aria-live="polite"></p>
+</dialog>
+
+<style>
+  /* A dialog is hidden until open, so only style the open state's display. */
+  .lightbox {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: #0a0a0a;
+    color: #faf9f6;
+  }
+
+  .lightbox[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lb-figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .lb-img {
+    display: block;
+    max-width: 100vw;
+    max-height: calc(100dvh - 6rem); /* leaves room for the caption */
+    object-fit: contain;
+  }
+
+  .lb-caption {
+    min-height: 1.5rem;
+    padding-inline: var(--gutter);
+    font-size: var(--text-sm);
+    color: #c9c6bd;
+    text-align: center;
+  }
+
+  .lb-caption:empty {
+    display: none;
+  }
+
+  .lb-count {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    font-size: var(--text-sm);
+    color: #c9c6bd;
+  }
+
+  /* Round, 44px buttons: big enough to tap, and visible on any photo. */
+  .lb-btn {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    color: #faf9f6;
+    background: rgb(20 19 17 / 0.55);
+    border: 1px solid rgb(250 249 246 / 0.25);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color var(--transition);
+  }
+
+  .lb-btn:hover {
+    background: rgb(60 58 52 / 0.8);
+  }
+
+  .lb-btn:focus-visible {
+    outline: 2px solid #faf9f6;
+    outline-offset: 2px;
+  }
+
+  .lb-btn svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .lb-close {
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .lb-prev,
+  .lb-next {
+    top: 50%;
+    translate: 0 -50%;
+  }
+
+  .lb-prev {
+    left: 1rem;
+  }
+
+  .lb-next {
+    right: 1rem;
+  }
+</style>
+
+<style is:global>
+  /* The page behind the open viewer shouldn't scroll. */
+  html:has(dialog.lightbox[open]) {
+    overflow: hidden;
+  }
+
+  /* Only when JavaScript is running do photos look clickable. */
+  .js .prose .media img {
+    cursor: zoom-in;
+  }
+</style>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>("dialog.lightbox");
+
+  if (dialog) {
+    const viewerImg = dialog.querySelector<HTMLImageElement>(".lb-img")!;
+    const caption = dialog.querySelector<HTMLElement>(".lb-caption")!;
+    const count = dialog.querySelector<HTMLElement>(".lb-count")!;
+
+    // Every photo in the story, in page order. (Videos aren't <img>.)
+    const photos = Array.from(document.querySelectorAll<HTMLImageElement>(".prose .media img"));
+    let current = 0;
+
+    // Load a photo into the viewer. The page's own srcset is reused with
+    // sizes="100vw", so the browser picks a large file instead of the small
+    // one used in the grid.
+    function load(target: HTMLImageElement, photo: HTMLImageElement) {
+      target.sizes = "100vw";
+      target.srcset = photo.srcset;
+      target.src = photo.currentSrc || photo.src;
+      target.alt = photo.alt;
+    }
+
+    function show(index: number) {
+      current = (index + photos.length) % photos.length; // wraps around
+      const photo = photos[current];
+      load(viewerImg, photo);
+      caption.textContent = photo.closest("figure")?.querySelector("figcaption")?.textContent ?? "";
+      count.textContent = `${current + 1} / ${photos.length}`;
+
+      // Fetch the neighbours now so the next click feels instant.
+      for (const step of [1, -1]) {
+        load(new Image(), photos[(current + step + photos.length) % photos.length]);
+      }
+    }
+
+    function open(index: number) {
+      show(index);
+      dialog!.showModal();
+    }
+
+    photos.forEach((photo, index) => {
+      // Make each photo reachable and usable by keyboard too.
+      photo.tabIndex = 0;
+      photo.setAttribute("role", "button");
+      photo.addEventListener("click", () => open(index));
+      photo.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          open(index);
+        }
+      });
+    });
+
+    dialog.querySelector(".lb-close")!.addEventListener("click", () => dialog.close());
+    dialog.querySelector(".lb-prev")!.addEventListener("click", () => show(current - 1));
+    dialog.querySelector(".lb-next")!.addEventListener("click", () => show(current + 1));
+
+    // Click the dark area (not the photo itself) to close.
+    dialog.addEventListener("click", (event) => {
+      const target = event.target as HTMLElement;
+      if (target === dialog || target.classList.contains("lb-figure")) dialog.close();
+    });
+
+    // Escape is built in. Add the arrow keys.
+    dialog.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight") show(current + 1);
+      if (event.key === "ArrowLeft") show(current - 1);
+    });
+
+    // Swipe left or right on a phone.
+    let touchStartX = 0;
+    dialog.addEventListener(
+      "touchstart",
+      (event) => {
+        touchStartX = event.touches[0].clientX;
+      },
+      { passive: true },
+    );
+    dialog.addEventListener("touchend", (event) => {
+      const distance = event.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(distance) > 50) show(current + (distance < 0 ? 1 : -1));
+    });
+  }
+</script>
