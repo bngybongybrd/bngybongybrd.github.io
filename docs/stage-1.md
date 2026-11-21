@@ -164,3 +164,13 @@ It uses the native `<dialog>` element. `showModal()` gives us the dark backdrop,
 3. **Scrollspy line:** change `rootMargin` in `DayIndex.astro` to `"-10% 0px -89% 0px"`. The highlight then switches when a day reaches the top of the screen instead of a third of the way down.
 4. **Try a badge:** add `[badge: food | Wild mushroom hotpot | Dali Ancient Town]` on its own line in a day file and watch it render as a pill.
 5. **Read the tree yourself:** add `console.log(JSON.stringify(tree.children[0], null, 2))` at the top of `transform()` in `remark-trip-media.mjs`, run `npm run build`, and look at the first node of each file. Then remove it.
+
+## Videos from an iPhone are HDR
+
+iPhones record HDR video by default (HLG, Rec. 2020 colours). On an HDR screen the browser shows it far brighter than the page around it, and elsewhere it looks washed out. `51-singing.mp4` was HDR, so it was converted to normal SDR video (Rec. 709) with ffmpeg:
+
+```bash
+ffmpeg -i in.mp4 -vf "zscale=tin=arib-std-b67:min=bt2020nc:pin=bt2020:t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,format=yuv420p" -c:v libx264 -crf 25 -preset slow -movflags +faststart -an -color_primaries bt709 -color_trc bt709 -colorspace bt709 out.mp4
+```
+
+To skip this for new clips, turn off HDR video on the iPhone (Settings → Camera → Record Video → HDR Video). To check a clip: `ffprobe in.mp4` shows `arib-std-b67` or `smpte2084` when it's HDR.
