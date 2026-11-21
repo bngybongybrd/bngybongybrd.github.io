@@ -134,7 +134,11 @@ Browsers without support (Firefox for now) and readers who prefer reduced motion
 
 ### Photos fade in as you scroll
 
-Each photo fades in as it enters the screen. It's the same scroll-driven technique as the day covers, with `animation-range: entry 0% entry 35%`: the fade starts when the photo's top edge appears and finishes once a third of it is on screen. Because it follows the scroll rather than a timer, scrolling back up fades it out again. It's only a fade, with no sliding, to keep motion calm. It's off for reduced motion and in browsers without support.
+Each photo fades in when it enters the screen. The trip page's script uses an `IntersectionObserver`, the same tool as the scrollspy: when 15% of a photo is visible it adds the class `is-visible`, and a CSS `transition` fades the opacity from 0 to 1 over 0.8s. The photo is then no longer watched, so it fades in only once.
+
+Photos are hidden only under `.js` (the class the head script adds when JavaScript runs), so without JavaScript nothing is hidden. With reduced motion, the CSS never hides them.
+
+(A first version used a CSS-only scroll-driven animation. Firefox doesn't support that yet, so it was replaced.)
 
 ### Captions show in the photo viewer
 

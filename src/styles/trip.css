@@ -114,30 +114,18 @@
   color: var(--text-muted);
 }
 
-/* Photos fade in as they scroll into view. A scroll-driven animation: its
-   progress follows the photo entering the screen (animation-range: entry),
-   not time, so scrolling back up reverses it. No JavaScript. Off for
-   reduced motion and in browsers without support (photos simply show).
-   Longhands on purpose: the minifier would merge them into an `animation`
-   shorthand containing view(), which browsers reject. */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .media {
-      animation-name: photo-reveal;
-      animation-timing-function: ease-out;
-      animation-fill-mode: both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 35%; /* fully shown once a third of it is on screen */
-    }
+/* Photos fade in as they scroll into view. The trip page's script adds
+   .is-visible when a photo enters the screen (IntersectionObserver), which
+   works in every browser. Photos are only hidden when JavaScript is running
+   (.js on <html>), so without it they simply show. Off for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .media {
+    opacity: 0;
+    transition: opacity 0.8s ease-out;
+  }
 
-    @keyframes photo-reveal {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
+  .js .media.is-visible {
+    opacity: 1;
   }
 }
 
