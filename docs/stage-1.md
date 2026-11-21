@@ -77,10 +77,12 @@ A trip page is read top to bottom like a book, so it uses a **centred** column. 
 | What | Max width | Why |
 |---|---|---|
 | Text | 680px | Comfortable line length (about 75 characters) |
-| Runs of photos | 880px | Photos a step wider than the words |
-| `[photo-only]` | 1180px | The widest moments, photos alone |
+| Runs of photos | 1240px | Photos much wider than the words, like a photo essay |
+| `[photo-only]` | 1600px | The widest moments, photos alone |
 
 Body text stays **left-aligned inside** its centred column. With centred paragraphs every line starts in a different place, which makes them hard to read. The day headings *are* centred, because they open each day like a chapter.
+
+On phones (700px and narrower) both photo blocks break out of the text gutter and run edge to edge.
 
 Each run of consecutive photos (e.g. 3+3+2) is wrapped in one `.media-run` with the same small gap as inside a group, so it reads as one spread.
 
@@ -114,7 +116,7 @@ The HTML has `controls`, so without JavaScript you can press play. The trip page
 ## Changes from PLAN.md (decided during the Stage 1 design review)
 
 - **Title over the hero photo**, instead of below it, with a soft text shadow for legibility and no tint over the image.
-- **Centred story column** on trip pages, with photo runs wider than the text.
+- **Centred story column** on trip pages, with photo runs much wider than the text (photos first, as on exposure.co).
 - **Stats as one quiet line** ("10 days   7 stops   Yubeng hike") instead of a bordered bar.
 - **No empty hero box** when there's no hero photo yet.
 - **Sticky bars are solid or nearly solid**, so text scrolling underneath doesn't show through.

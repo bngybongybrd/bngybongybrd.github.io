@@ -9,14 +9,15 @@
    A trip is read top to bottom like a book, so its column is centred on the
    page. Three widths, each centred on the same axis:
      text            680px   comfortable line length
-     runs of photos  880px   photos a step wider than the words
-     [photo-only]    1180px  the widest moments, photos alone
+     runs of photos  1240px  photos much wider than the words
+     [photo-only]    1600px  the widest moments, photos alone
+   On phones both photo blocks run edge to edge.
    Body text stays left-aligned inside its column: centred paragraphs are
    hard to read because every line starts in a different place. */
 
 :root {
-  --photo-width: 880px;
-  --photo-only-width: 1180px;
+  --photo-width: 1240px;
+  --photo-only-width: 1600px;
 }
 
 .prose > * {
@@ -145,13 +146,41 @@
   grid-row: span 2;
 }
 
-/* Wider [photo-only] blocks get a slightly flatter shape. */
-.photo-only .media-2 {
+/* Wider blocks get a flatter shape so a spread still fits on one screen. */
+.media-run .media-2 {
   aspect-ratio: 16 / 9;
 }
 
-.photo-only .media-3 {
+.media-run .media-3 {
   aspect-ratio: 3 / 2;
+}
+
+.photo-only .media-2 {
+  aspect-ratio: 2 / 1;
+}
+
+.photo-only .media-3 {
+  aspect-ratio: 16 / 9;
+}
+
+/* Phones: photo blocks break out of the text gutter and run edge to edge. */
+@media (max-width: 700px) {
+  .prose > .media-run,
+  .prose > .photo-only {
+    max-width: none;
+    margin-inline: calc(-1 * var(--gutter));
+  }
+
+  .media-run .media img,
+  .photo-only .media img {
+    border-radius: 0;
+    border-inline: 0;
+  }
+
+  /* Captions keep the text gutter. */
+  .media figcaption {
+    padding-inline: var(--gutter);
+  }
 }
 
 /* Captions: small and quiet, only where you wrote one. */
