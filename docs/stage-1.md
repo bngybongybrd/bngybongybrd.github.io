@@ -86,7 +86,9 @@ Each run of consecutive photos (e.g. 3+3+2) is wrapped in one `.media-run` with 
 
 ### The hero: title over the photo
 
-With a hero photo, the image runs edge to edge (`position: absolute; inset: 0; object-fit: cover`) and the title sits over its lower part. White text on an unknown photo needs a dark enough background, so `::after` adds a **fade** that is dark at the bottom and clear at the top. A flat dark tint would dull the whole photo. Without a hero, the title block opens the page on its own.
+With a hero photo, the image runs edge to edge (`position: absolute; inset: 0; object-fit: cover`) and the title sits over its lower part. There is **no tint or gradient over the photo**, so it shows at full brightness. White text on an unknown photo still needs help to stay readable, so the three text lines get a soft `text-shadow`: a tight layer for crisp edges and a wide, faint one that lifts the letters off busy areas like the rice. The shadow only affects pixels right around the letters. Without a hero, the title block opens the page on its own.
+
+(An earlier version used a dark fade over the lower part of the photo. It was removed because it dulled the image.)
 
 ### How the grids look the way they do (`src/styles/trip.css`)
 
@@ -111,7 +113,7 @@ The HTML has `controls`, so without JavaScript you can press play. The trip page
 
 ## Changes from PLAN.md (decided during the Stage 1 design review)
 
-- **Title over the hero photo**, on a soft dark fade, instead of below it. The fade is the one gradient on the site, and it's there for legibility.
+- **Title over the hero photo**, instead of below it, with a soft text shadow for legibility and no tint over the image.
 - **Centred story column** on trip pages, with photo runs wider than the text.
 - **Stats as one quiet line** ("10 days   7 stops   Yubeng hike") instead of a bordered bar.
 - **No empty hero box** when there's no hero photo yet.
