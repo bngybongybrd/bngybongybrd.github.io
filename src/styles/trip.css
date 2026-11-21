@@ -82,11 +82,6 @@
   height: auto;
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
-  transition: opacity var(--transition);
-}
-
-.media img:hover {
-  opacity: 0.94;
 }
 
 /* Photo captions are shown in the photo viewer, not under the photo, so
