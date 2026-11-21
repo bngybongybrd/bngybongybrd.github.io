@@ -113,6 +113,12 @@ Without JavaScript, the chips are still normal `#day-N` links that jump to each 
 
 The HTML has `controls`, so without JavaScript you can press play. The trip page script removes the controls and plays the muted clip only while it's on screen. If your system asks for reduced motion, the script leaves it alone, so you see the poster and can choose to play it.
 
+### The photo viewer (`Lightbox.astro`)
+
+Click any photo to see it large on a dark screen. The arrow buttons, the left and right arrow keys, or a swipe on a phone step through every photo in the story. Escape, the X, or a click on the dark area closes it.
+
+It uses the native `<dialog>` element. `showModal()` gives us the dark backdrop, Escape to close, focus trapping, and focus returning to the photo you clicked, with no library. The script gathers every `.prose .media img` in page order and reuses each photo's own `srcset` with `sizes="100vw"`, so the browser picks a large file. It loads the next and previous photos early so stepping feels instant. Photos also become keyboard-focusable (Enter or Space opens them). Without JavaScript the photos are plain images and nothing changes.
+
 ## Changes from PLAN.md (decided during the Stage 1 design review)
 
 - **Title over the hero photo**, instead of below it, with a soft text shadow for legibility and no tint over the image.
@@ -129,6 +135,8 @@ The HTML has `controls`, so without JavaScript you can press play. The trip page
 - **Smart punctuation** changes how quotes and dashes look on the page only. Your `.md` files are never modified.
 
 ## Try changing this
+
+0. **Viewer wrap-around:** in `Lightbox.astro`, `show()` wraps from the last photo to the first. Change it to stop at the ends and hide the arrow there.
 
 1. **Group sizes:** in `remark-trip-media.mjs`, change `groupSizes()` so 4 photos become one row of 4. You'll also need a `.media-4` rule in `trip.css`.
 2. **The two-up shape:** change `.media-2 { aspect-ratio: 3 / 2 }` to `4 / 3` and see how much the photos crop.
