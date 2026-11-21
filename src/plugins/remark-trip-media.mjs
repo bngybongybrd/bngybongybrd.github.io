@@ -216,13 +216,14 @@ function isVideo(image) {
 
 // Videos aren't handled by Astro's image pipeline, so scripts/sync-videos.mjs
 // copies them into public/trips/<slug>/... and we point at that copy.
-// The poster is the file next to the video with the same number ending in
-// "-poster.webp" (e.g. 51-singing.mp4 → 51-IMG_4819-poster.webp).
+// The poster is the file next to the video named after it with "-poster.webp"
+// (market-walk.mp4 → market-walk-poster.webp), or else the file with the same
+// number ending in "-poster.webp" (51-singing.mp4 → 51-IMG_4819-poster.webp).
 function buildVideo(image, ctx, style) {
   const relative = image.url.replace(/^\.\//, "");
   const publicUrl = `/trips/${ctx.slug}/${relative}`;
   const poster = findPoster(path.join(ctx.fileDir, relative));
-  if (!poster) warn(ctx, `no poster found for ${path.basename(relative)} (expected NN-...-poster.webp)`);
+  if (!poster) warn(ctx, `no poster found for ${path.basename(relative)} (expected <name>-poster.webp)`);
   const posterUrl = poster ? `/trips/${ctx.slug}/${path.posix.join(path.posix.dirname(relative), poster)}` : null;
 
   // `controls` is the no-JavaScript fallback. The small script on the trip page
@@ -247,6 +248,8 @@ function buildVideo(image, ctx, style) {
 
 function findPoster(videoPath) {
   const dir = path.dirname(videoPath);
+  const sameName = path.basename(videoPath, path.extname(videoPath)) + "-poster.webp";
+  if (fs.existsSync(path.join(dir, sameName))) return sameName;
   const number = path.basename(videoPath).split("-")[0];
   try {
     return fs.readdirSync(dir).find((f) => f.startsWith(number + "-") && f.endsWith("-poster.webp")) ?? null;
