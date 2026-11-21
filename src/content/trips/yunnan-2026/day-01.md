@@ -28,7 +28,7 @@ The street fortunately wasn’t bustling when we reached and we managed to walk 
 ![](media/day-01/haikou-local-market.webp)
 ![](media/day-01/market-walk.mp4)
 ![](media/day-01/wet-market.mp4 "Wet market further in")
-![](media/day-01/oysters.webp "Oysters here were sold at 5R MB each.")
+![](media/day-01/oysters.webp "Oysters here were sold at 5 RMB each.")
 [/photo-only]
 
 There was a food street market and we got some freshly squeezed sugar cane juice, rice cakes and passion fruit flavoured thousand layer cake. It felt pretty underwhelming since I could see the similarities to those in Singapore and slightly interesting due to the intersection of cultures.
