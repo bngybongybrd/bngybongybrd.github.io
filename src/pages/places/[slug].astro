@@ -73,6 +73,21 @@ const Intro = intro ? (await render(intro)).Content : null;
 </style>
 
 <script>
+  // Photos fade in as they enter the screen (the fade itself is CSS, in
+  // trip.css). Each photo is shown once and then no longer watched.
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        }
+      }
+    },
+    { threshold: 0.15 },
+  );
+  document.querySelectorAll(".prose .media").forEach((photo) => revealObserver.observe(photo));
+
   // Trip videos: written with `controls` so they work without JavaScript.
   // Here we turn them into quiet, looping clips that play only while on
   // screen, unless the reader prefers reduced motion (then: poster + controls).
