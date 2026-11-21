@@ -9,9 +9,10 @@
 //      photos: up to 3 per row, 4+ split into rows of 3 and 2. Every photo
 //      gets its shape (--ar = width / height, read from the file) so the CSS
 //      can make a row's photos the same height without cropping any.
-//   3. [photo-only] ... [/photo-only] → the same rows, without captions.
+//   3. [photo-only] ... [/photo-only] → the same rows (kept for old files).
 //      [full-width] ... [/full-width] → each photo spans the whole screen.
-//   4. A quoted image title becomes a visible caption (<figcaption>).
+//   4. A quoted image title becomes a <figcaption>. Photo captions are
+//      hidden on the page and shown in the photo viewer (Lightbox.astro).
 //   5. .mp4 "images" become <video> elements with their poster image.
 //   6. [badge: type | title | detail] → one small pill.
 //   7. Warns (does not fail) when images have no alt text.
@@ -148,13 +149,13 @@ export function groupSizes(n) {
 
 // Each group is one row. --ar-sum (the photos' shapes added up) lets the CSS
 // cap the row's height; each photo's own --ar sets its share of the width.
-function buildGroups(media, ctx, insidePhotoOnly) {
+function buildGroups(media, ctx) {
   const groups = [];
   let start = 0;
   for (const size of groupSizes(media.length)) {
     const row = media.slice(start, start + size);
     start += size;
-    const items = row.map((m) => buildItem(m, ctx, insidePhotoOnly));
+    const items = row.map((m) => buildItem(m, ctx));
     const sum = row.reduce((total, m) => total + ctx.ratios.get(m), 0);
     groups.push(element("div", ["media-group", `media-${size}`], items, `--ar-sum: ${round(sum)}`));
   }
@@ -163,13 +164,13 @@ function buildGroups(media, ctx, insidePhotoOnly) {
 
 function buildBlock({ name, media }, ctx) {
   if (name === "full-width") {
-    return element("div", ["full-width"], media.map((m) => buildItem(m, ctx, false)));
+    return element("div", ["full-width"], media.map((m) => buildItem(m, ctx)));
   }
-  return element("div", ["photo-only"], buildGroups(media, ctx, true));
+  return element("div", ["photo-only"], buildGroups(media, ctx));
 }
 
-// One photo or video, wrapped in <figure>. [photo-only] has no captions.
-function buildItem(image, ctx, insidePhotoOnly) {
+// One photo or video, wrapped in <figure>.
+function buildItem(image, ctx) {
   const style = `--ar: ${round(ctx.ratios.get(image))}`;
   if (isVideo(image)) return buildVideo(image, ctx, style);
 
@@ -180,7 +181,7 @@ function buildItem(image, ctx, insidePhotoOnly) {
   image.title = null; // the caption is shown below, so no hover tooltip as well
 
   const children = [image];
-  if (caption && !insidePhotoOnly) {
+  if (caption) {
     children.push(element("figcaption", [], [{ type: "text", value: caption }]));
   }
   return element("figure", ["media"], children, style);
