@@ -6,8 +6,8 @@ dates:
   start: 2026-09-12
   end: 2026-09-21
 summary: Ten days across Yunnan, from Dali to the Yubeng trail.
-cover: media/day-02/20-scenery2.webp # used on cards and the globe page (for now)
-hero: media/day-02/20-scenery2.webp # the wide photo at the top of the trip page (for now)
+cover: media/hero.webp # used on cards and the globe page
+hero: media/hero.webp # the wide photo at the top of the trip page
 stats:
   days: 10
   highlight: Yubeng hike
