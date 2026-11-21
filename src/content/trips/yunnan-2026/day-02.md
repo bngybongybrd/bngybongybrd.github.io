@@ -89,14 +89,14 @@ Back down, Quentin got a sausage as a snack since it was nearing evening and we 
 
 Coincidentally, around five to ten minutes before leaving, there was some singing and celebration going on. According to the banner in the video I took, its called 烟火海东天天火把节 (Haidong Daily Fireworks Festival). Apparently it's supposed to be celebrated on the 25th day of the 6th lunar month, 28th July 2026, but I guess this place is special.
 
-![](media\day-02\51-singing.mp4)
+![](media/day-02/51-singing.mp4)
 
 Anyway, our tour ended around 8-9pm. We decided to head to Dali Ancient Town (大理古镇) to have our dinner, since our stay was nearby. 
 
 [photo-only]
-![](media\day-02\52-entrance.webp)
-![](media\day-02\53-hotpot-dinner.webp)
-![](media\day-02\54-wild-mushrooms.webp)
+![](media/day-02/52-entrance.webp)
+![](media/day-02/53-hotpot-dinner.webp)
+![](media/day-02/54-wild-mushrooms.webp)
 [/photo-only]
 
 It took some time for us to decide but we ended up searching for a popular spot and had wild mushroom hotpot. The mushrooms had to be cooked in the hotpot for at least 25 minutes before we can start eating (The waitress told us that theres small worms in the mushrooms that needed to be killed).

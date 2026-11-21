@@ -8,32 +8,32 @@ places: [yubeng]
 ---
 
 [full-width]
-![](landscape.webp)
+![](media/day-05/landscape.webp)
 [/full-width]
 
 We woke up early in the morning, had our breakfast, stored some 鲜花饼 into our bags, and left the rest along with the container at the stay.
 
-![](breakfast.webp)
+![](media/day-05/breakfast.webp)
 
 We had planned to come back and collect it after the hike since we will be passing by again. We headed to the bus station, departed at 1030, arrived at Deqin around 1400, changed bus, and reached Ninong around 1450. The scenery on the way was breathtaking.
 
 ![](media/day-05/view1.webp)
 ![](media/day-05/view2.webp)
 ![](media/day-05/view3.webp)
-![](view5.mp4)
-![](bend.mp4 "金沙江大拐弯")
-![](view6.webp "金沙江大拐弯")
-![](view7.webp "金沙江大拐弯")
+![](media/day-05/view5.mp4)
+![](media/day-05/bend.mp4 "金沙江大拐弯")
+![](media/day-05/view6.webp "金沙江大拐弯")
+![](media/day-05/view7.webp "金沙江大拐弯")
 ![](media/day-05/view8.webp)
 ![](media/day-05/view9.webp)
 ![](media/day-05/view10.webp)
-![](cow.mp4 "Yak on road!")
+![](media/day-05/cow.mp4 "Yak on road!")
 ![](media/day-05/view11.webp)
 ![](media/day-05/view12.webp)
 ![](media/day-05/view13.webp)
 ![](media/day-05/view14.webp)
 ![](media/day-05/view15.webp)
-![](view16.webp "View of Ninong Village from the bus")
+![](media/day-05/view16.webp "View of Ninong Village from the bus")
 
 We started the hike up around 1520. The initial hike up a small hill had already started to prove challenging as I was panting at the top, before even purchasing entrance tickets. We managed to get ourselves a student price at half the original price.
 
