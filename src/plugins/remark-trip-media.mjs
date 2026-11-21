@@ -5,10 +5,12 @@
 //
 // What it does, in order:
 //   1. Reads image paths with "\" as "/" (Windows-style paths still work).
-//   2. Finds paragraphs made only of images (and [photo-only] tags) and
-//      replaces them with grids: 1 photo → full figure, 2 → two-up,
-//      3 → bento, 4+ → groups of 3 and 2.
-//   3. [photo-only] ... [/photo-only] → a wider block with no captions.
+//   2. Finds paragraphs made only of images and replaces them with rows of
+//      photos: up to 3 per row, 4+ split into rows of 3 and 2. Every photo
+//      gets its shape (--ar = width / height, read from the file) so the CSS
+//      can make a row's photos the same height without cropping any.
+//   3. [photo-only] ... [/photo-only] → the same rows, without captions.
+//      [full-width] ... [/full-width] → each photo spans the whole screen.
 //   4. A quoted image title becomes a visible caption (<figcaption>).
 //   5. .mp4 "images" become <video> elements with their poster image.
 //   6. [badge: type | title | detail] → one small pill.
@@ -21,25 +23,32 @@
 
 import fs from "node:fs";
 import path from "node:path";
+// Astro's own image reader (already installed with Astro): gives width/height.
+import { imageMetadata } from "astro/assets/utils";
 
-const OPEN = "[photo-only]";
-const CLOSE = "[/photo-only]";
-const MARKER = /(\[\/?photo-only\])/;
+const MARKER = /(\[\/?(?:photo-only|full-width)\])/;
+const TAG = /^\[(\/?)(photo-only|full-width)\]$/;
 const BADGE = /^\[badge:\s*([^|\]]+?)\s*\|\s*([^|]+?)\s*\|\s*([\s\S]*?)\s*\]$/;
 
 export default function remarkTripMedia() {
-  return function transform(tree, file) {
+  return async function transform(tree, file) {
     const ctx = {
       file,
       fileDir: file.path ? path.dirname(file.path) : "",
       slug: tripSlug(file.path),
       missingAlt: [],
-      twoUpCount: 0, // alternates the 1.4fr / 1fr widths between two-up groups
+      ratios: new Map(), // image node → width / height
     };
 
+    // Read every photo's shape first (reading files is asynchronous).
+    const images = tree.children
+      .filter((node) => node.type === "paragraph")
+      .flatMap((paragraph) => paragraph.children.filter((child) => child.type === "image"));
+    await Promise.all(images.map(async (image) => ctx.ratios.set(image, await readRatio(image, ctx))));
+
     const output = [];
-    let photoOnly = null; // collects media while inside [photo-only]
-    let bucket = []; // collects consecutive media outside [photo-only]
+    let block = null; // { name, media } while inside [photo-only] or [full-width]
+    let bucket = []; // collects consecutive media outside a block
 
     // One run of consecutive photos (e.g. 8 → groups of 3+3+2) is wrapped in a
     // single .media-run so its groups sit tight together, like one spread.
@@ -52,7 +61,7 @@ export default function remarkTripMedia() {
       const tokens = node.type === "paragraph" ? tokenize(node) : null;
 
       // A paragraph that is a single [badge: ...] line.
-      if (tokens && !photoOnly && isBadge(node)) {
+      if (tokens && !block && isBadge(node)) {
         flushBucket();
         output.push(buildBadge(node));
         continue;
@@ -60,7 +69,7 @@ export default function remarkTripMedia() {
 
       // Anything that isn't a "media-only" paragraph stays exactly as written.
       if (!tokens || tokens.some((t) => t.kind === "content")) {
-        if (photoOnly && tokens) warn(ctx, "text inside a [photo-only] block is shown as normal text");
+        if (block && tokens) warn(ctx, `text inside a [${block.name}] block is shown as normal text`);
         flushBucket();
         output.push(node);
         continue;
@@ -69,22 +78,22 @@ export default function remarkTripMedia() {
       for (const token of tokens) {
         if (token.kind === "open") {
           flushBucket();
-          photoOnly = [];
+          block = { name: token.name, media: [] };
         } else if (token.kind === "close") {
-          if (photoOnly) output.push(buildPhotoOnly(photoOnly, ctx));
-          else warn(ctx, `found ${CLOSE} without a matching ${OPEN}`);
-          photoOnly = null;
+          if (block) output.push(buildBlock(block, ctx));
+          else warn(ctx, `found [/${token.name}] without a matching [${token.name}]`);
+          block = null;
         } else if (token.kind === "media") {
-          (photoOnly ?? bucket).push(token.node);
+          (block ? block.media : bucket).push(token.node);
         }
       }
-      // A blank line ends a normal group; a [photo-only] block can span blank lines.
+      // A blank line ends a normal run; a block can span blank lines.
       flushBucket();
     }
 
-    if (photoOnly) {
-      warn(ctx, `${OPEN} was never closed; its photos are shown anyway`);
-      output.push(buildPhotoOnly(photoOnly, ctx));
+    if (block) {
+      warn(ctx, `[${block.name}] was never closed; its photos are shown anyway`);
+      output.push(buildBlock(block, ctx));
     }
 
     tree.children = output;
@@ -107,8 +116,8 @@ function tokenize(paragraph) {
       tokens.push({ kind: "media", node: child });
     } else if (child.type === "text") {
       for (const piece of child.value.split(MARKER)) {
-        if (piece === OPEN) tokens.push({ kind: "open" });
-        else if (piece === CLOSE) tokens.push({ kind: "close" });
+        const tag = piece.match(TAG);
+        if (tag) tokens.push({ kind: tag[1] ? "close" : "open", name: tag[2] });
         else if (piece.trim() !== "") tokens.push({ kind: "content" });
       }
     } else if (child.type !== "break") {
@@ -137,28 +146,32 @@ export function groupSizes(n) {
   return [3, ...groupSizes(n - 3)];
 }
 
+// Each group is one row. --ar-sum (the photos' shapes added up) lets the CSS
+// cap the row's height; each photo's own --ar sets its share of the width.
 function buildGroups(media, ctx, insidePhotoOnly) {
   const groups = [];
   let start = 0;
   for (const size of groupSizes(media.length)) {
-    const items = media.slice(start, start + size).map((m) => buildItem(m, ctx, insidePhotoOnly));
+    const row = media.slice(start, start + size);
     start += size;
-
-    const classes = ["media-group", `media-${size}`];
-    if (size === 2 && ctx.twoUpCount++ % 2 === 1) classes.push("flip");
-    if (size === 1 && isVideo(media[start - 1])) classes.push("media-video-group");
-    groups.push(element("div", classes, items));
+    const items = row.map((m) => buildItem(m, ctx, insidePhotoOnly));
+    const sum = row.reduce((total, m) => total + ctx.ratios.get(m), 0);
+    groups.push(element("div", ["media-group", `media-${size}`], items, `--ar-sum: ${round(sum)}`));
   }
   return groups;
 }
 
-function buildPhotoOnly(media, ctx) {
+function buildBlock({ name, media }, ctx) {
+  if (name === "full-width") {
+    return element("div", ["full-width"], media.map((m) => buildItem(m, ctx, false)));
+  }
   return element("div", ["photo-only"], buildGroups(media, ctx, true));
 }
 
-// One photo or video, wrapped in <figure>. Captions only outside [photo-only].
+// One photo or video, wrapped in <figure>. [photo-only] has no captions.
 function buildItem(image, ctx, insidePhotoOnly) {
-  if (isVideo(image)) return buildVideo(image, ctx);
+  const style = `--ar: ${round(ctx.ratios.get(image))}`;
+  if (isVideo(image)) return buildVideo(image, ctx, style);
 
   if (!image.url.startsWith("./") && !image.url.startsWith("../")) image.url = "./" + image.url;
   if (!image.alt) ctx.missingAlt.push(path.basename(image.url));
@@ -170,7 +183,30 @@ function buildItem(image, ctx, insidePhotoOnly) {
   if (caption && !insidePhotoOnly) {
     children.push(element("figcaption", [], [{ type: "text", value: caption }]));
   }
-  return element("figure", ["media"], children);
+  return element("figure", ["media"], children, style);
+}
+
+// A photo's shape: width / height. A video's shape comes from its poster.
+async function readRatio(image, ctx) {
+  image.url = image.url.replaceAll("\\", "/");
+  const relative = image.url.replace(/^\.\//, "");
+  let file = path.join(ctx.fileDir, relative);
+  if (isVideo(image)) {
+    const poster = findPoster(file);
+    if (!poster) return 16 / 9;
+    file = path.join(path.dirname(file), poster);
+  }
+  try {
+    const { width, height } = await imageMetadata(new Uint8Array(fs.readFileSync(file)), file);
+    return width / height;
+  } catch {
+    warn(ctx, `couldn't read the size of ${relative}; assuming 3:2`);
+    return 1.5;
+  }
+}
+
+function round(n) {
+  return Math.round(n * 1000) / 1000;
 }
 
 function isVideo(image) {
@@ -181,7 +217,7 @@ function isVideo(image) {
 // copies them into public/trips/<slug>/... and we point at that copy.
 // The poster is the file next to the video with the same number ending in
 // "-poster.webp" (e.g. 51-singing.mp4 → 51-IMG_4819-poster.webp).
-function buildVideo(image, ctx) {
+function buildVideo(image, ctx, style) {
   const relative = image.url.replace(/^\.\//, "");
   const publicUrl = `/trips/${ctx.slug}/${relative}`;
   const poster = findPoster(path.join(ctx.fileDir, relative));
@@ -205,7 +241,7 @@ function buildVideo(image, ctx) {
   const html = `<video ${attrs.join(" ")}><source src="${publicUrl}" type="video/mp4"></video>`;
   const children = [{ type: "html", value: html }];
   if (image.title) children.push(element("figcaption", [], [{ type: "text", value: image.title }]));
-  return element("figure", ["media", "media-video"], children);
+  return element("figure", ["media", "media-video"], children, style);
 }
 
 function findPoster(videoPath) {
@@ -231,12 +267,11 @@ function buildBadge(paragraph) {
 // --- Small helpers ----------------------------------------------------------
 
 // A custom node that becomes <tag class="..."> in the HTML.
-function element(tag, classes, children) {
-  return {
-    type: "tripMedia",
-    data: { hName: tag, hProperties: classes.length ? { className: classes } : {} },
-    children,
-  };
+function element(tag, classes, children, style) {
+  const properties = {};
+  if (classes.length) properties.className = classes;
+  if (style) properties.style = style;
+  return { type: "tripMedia", data: { hName: tag, hProperties: properties }, children };
 }
 
 function tripSlug(filePath = "") {
