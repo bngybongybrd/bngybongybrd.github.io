@@ -1,7 +1,7 @@
 // Site-wide settings. Change things here, not in the components.
 
-// Your display name isn't decided yet (PLAN.md section 5).
-export const siteName = "[PLACEHOLDER: name]";
+// Your display name: shown in the nav, the footer and every page title.
+export const siteName = "Ng Ying Xuan";
 
 export const siteDescription = "[PLACEHOLDER: one-line site description]";
 
