@@ -66,17 +66,14 @@ const { Content } = await render(entry);
   }
 
   /* --- Cover: a wide band across the whole screen ---------------------------
-     The photo is cropped to a band (object-fit: cover). Where the browser
-     supports scroll-driven animations, the photo drifts slower than the page
-     as you scroll past, so the band feels like a window onto the scene.
-     Browsers without support, and readers who prefer reduced motion, get a
-     still photo. */
+     The photo is cropped to a band (object-fit: cover). As you scroll past,
+     the script below moves the photo slower than the page ("drift"), so the
+     band feels like a window onto the scene. Without JavaScript, or for
+     readers who prefer reduced motion, the photo stays still. */
   .day-cover {
     position: relative;
     height: min(75vh, 720px);
     margin: 0 calc(-1 * var(--gutter)) 3rem; /* cancel the page gutter */
-    /* clip, not hidden: "hidden" makes this box a scroll container, and the
-       scroll-driven animation would then track it instead of the page. */
     overflow: clip;
   }
 
@@ -87,29 +84,13 @@ const { Content } = await render(entry);
     object-fit: cover;
   }
 
-  @supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-      .day-cover :global(img) {
-        /* 20% taller than the band, so it has room to move. */
-        position: absolute;
-        top: -10%;
-        height: 120%;
-        /* Longhands on purpose: the CSS minifier would otherwise merge them into
-           an `animation` shorthand containing view(), which browsers reject. */
-        animation-name: cover-drift;
-        animation-timing-function: linear;
-        animation-fill-mode: both;
-        animation-timeline: view(); /* progress = the band crossing the screen */
-      }
-
-      @keyframes cover-drift {
-        from {
-          translate: 0 -8%;
-        }
-        to {
-          translate: 0 8%;
-        }
-      }
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .day-cover :global(img) {
+      /* 30% taller than the band, so it has room to move. */
+      position: absolute;
+      top: -15%;
+      height: 130%;
+      translate: 0 var(--drift, 0%); /* set by the script */
     }
   }
 
@@ -134,3 +115,39 @@ const { Content } = await render(entry);
     color: var(--text);
   }
 </style>
+
+<script>
+  // Cover drift: while a cover band is on screen, move its photo by up to
+  // ±11% of the photo's height in the direction you scroll, so it moves slower
+  // than the page. Runs at most once per frame (requestAnimationFrame).
+  const covers = document.querySelectorAll<HTMLElement>(".day-cover");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (covers.length && !reduceMotion) {
+    let queued = false;
+
+    const update = () => {
+      queued = false;
+      for (const cover of covers) {
+        const box = cover.getBoundingClientRect();
+        if (box.bottom < 0 || box.top > window.innerHeight) continue; // off screen
+        // 0 when the band's top enters at the bottom of the screen,
+        // 1 when its bottom leaves at the top.
+        const progress = (window.innerHeight - box.top) / (window.innerHeight + box.height);
+        const drift = (progress - 0.5) * 22; // -11% … +11%
+        cover.style.setProperty("--drift", `${drift.toFixed(2)}%`);
+      }
+    };
+
+    const onScroll = () => {
+      if (!queued) {
+        queued = true;
+        requestAnimationFrame(update);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    update();
+  }
+</script>
