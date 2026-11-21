@@ -39,13 +39,20 @@ export default function remarkTripMedia() {
       slug: tripSlug(file.path),
       missingAlt: [],
       ratios: new Map(), // image node → width / height
+      missing: new Set(), // image nodes whose file can't be found (left out)
     };
 
-    // Read every photo's shape first (reading files is asynchronous).
+    // Find every photo's file and read its shape first (reading files is
+    // asynchronous). Missing files are left out with a warning rather than
+    // failing the whole build.
     const images = tree.children
       .filter((node) => node.type === "paragraph")
       .flatMap((paragraph) => paragraph.children.filter((child) => child.type === "image"));
-    await Promise.all(images.map(async (image) => ctx.ratios.set(image, await readRatio(image, ctx))));
+    for (const image of images) {
+      if (!resolveFile(image, ctx)) ctx.missing.add(image);
+    }
+    const found = images.filter((image) => !ctx.missing.has(image));
+    await Promise.all(found.map(async (image) => ctx.ratios.set(image, await readRatio(image, ctx))));
 
     const output = [];
     let block = null; // { name, media } while inside [photo-only] or [full-width]
@@ -84,7 +91,7 @@ export default function remarkTripMedia() {
           if (block) output.push(buildBlock(block, ctx));
           else warn(ctx, `found [/${token.name}] without a matching [${token.name}]`);
           block = null;
-        } else if (token.kind === "media") {
+        } else if (token.kind === "media" && !ctx.missing.has(token.node)) {
           (block ? block.media : bucket).push(token.node);
         }
       }
@@ -187,9 +194,29 @@ function buildItem(image, ctx) {
   return element("figure", ["media"], children, style);
 }
 
+// Finds the file an image line points to, relative to the day file.
+// A bare file name ("view5.mp4") is also looked up in the day's own media
+// folder (media/day-05/), since that's almost certainly what was meant; the
+// path is read that way, with a warning, and the .md file is not changed.
+// Returns false when the file can't be found anywhere.
+function resolveFile(image, ctx) {
+  image.url = image.url.replaceAll("\\", "/").replace(/^\.\//, "");
+  if (fs.existsSync(path.join(ctx.fileDir, image.url))) return true;
+
+  const dayFolder = path.basename(ctx.file.path ?? "", ".md"); // "day-05"
+  const guess = path.posix.join("media", dayFolder, path.posix.basename(image.url));
+  if (fs.existsSync(path.join(ctx.fileDir, guess))) {
+    warn(ctx, `"${image.url}" read as "${guess}" (write the full path to silence this)`);
+    image.url = guess;
+    return true;
+  }
+
+  warn(ctx, `file not found, left out: ${image.url}`);
+  return false;
+}
+
 // A photo's shape: width / height. A video's shape comes from its poster.
 async function readRatio(image, ctx) {
-  image.url = image.url.replaceAll("\\", "/");
   const relative = image.url.replace(/^\.\//, "");
   let file = path.join(ctx.fileDir, relative);
   if (isVideo(image)) {
