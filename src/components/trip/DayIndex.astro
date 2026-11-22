@@ -83,6 +83,14 @@ const { days } = Astro.props;
 </style>
 
 <script>
+  // Tell the page how tall this bar is, so a jump to a day can land just
+  // below it (DaySection.astro uses --day-index-height).
+  const bar = document.querySelector<HTMLElement>(".day-index");
+  const setBarHeight = () =>
+    bar && document.documentElement.style.setProperty("--day-index-height", `${bar.offsetHeight}px`);
+  setBarHeight();
+  window.addEventListener("resize", setBarHeight);
+
   // Scrollspy: watch each day section and mark its chip while it's in view.
   const chips = new Map<string, HTMLAnchorElement>();
   document.querySelectorAll<HTMLAnchorElement>(".day-index a").forEach((chip) => {
