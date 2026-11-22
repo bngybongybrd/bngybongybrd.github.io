@@ -30,7 +30,14 @@ const { Content } = await render(entry);
 
 <style>
   .day {
-    padding-top: clamp(4rem, 3rem + 4vw, 7rem);
+    /* Space between days. A margin, not padding, so that a jump to #day-N
+       lands on the heading itself rather than on empty space above it. */
+    margin-top: clamp(4rem, 3rem + 4vw, 7rem);
+    /* Where a jump lands: below the site nav and the sticky day bar, with
+       the same 2.5rem gap as between the date and the first paragraph.
+       (The page already adds nav height + 1rem: see scroll-padding-top in
+       base.css.) --day-index-height is measured by DayIndex.astro. */
+    scroll-margin-top: calc(var(--day-index-height, 58px) + 1.25rem);
   }
 
   .day-head {

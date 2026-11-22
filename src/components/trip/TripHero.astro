@@ -161,8 +161,10 @@ const subtitleLang = subtitle && /\p{Script=Han}/u.test(subtitle) ? "zh-Hans" : 
     color: #faf9f6; /* fully opaque: translucent white loses contrast on bright areas */
   }
 
-  /* The small dates line gets a little more weight so it holds up on texture. */
+  /* The dates line gets a little more size and weight on a photo so it holds
+     up on busy texture like the rice. */
   .has-image .dates {
+    font-size: var(--text-base);
     font-weight: 500;
   }
 </style>
