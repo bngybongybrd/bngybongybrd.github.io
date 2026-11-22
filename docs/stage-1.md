@@ -161,7 +161,7 @@ It uses the native `<dialog>` element. `showModal()` gives us the dark backdrop,
 
 ## Good to know
 
-- **Plugin changes need a cache bump.** Astro remembers the rendered output of unchanged day files, here and in the deploy's cache, and does not notice when a plugin changes. When a plugin's HTML changes, raise `layout` in `astro.config.mjs` (e.g. `[remarkTripMedia, { layout: 3 }]`). Without it, the live site showed new CSS with old HTML and the photos vanished.
+- **Plugin changes need a cache bump.** Astro remembers the rendered output of unchanged day files, here and in the deploy's cache, and does not notice when a plugin changes. When a plugin's HTML changes, raise `layout` in `astro.config.mjs` (e.g. `[remarkTripMedia, { layout: 3 }]`). Without it, the live site showed new CSS with old HTML and the photos vanished. The same goes for adding a file that a day already pointed to but was missing: the day's text didn't change, so Astro reuses the old page until `layout` is raised.
 - **Alt-text warnings** appear when a day file is rendered. Astro caches unchanged files, so you'll see the warning after editing a day, not on every build. To see all warnings again, delete `node_modules/.astro`.
 - **After adding or renaming a video while `npm run dev` is running**, restart it so `sync-videos.mjs` copies the file.
 - **Poster naming:** a video's poster is `<video name>-poster.webp` next to it (`market-walk.mp4` → `market-walk-poster.webp`). The older numbered rule (`51-…mp4` → `51-…-poster.webp`) still works.
