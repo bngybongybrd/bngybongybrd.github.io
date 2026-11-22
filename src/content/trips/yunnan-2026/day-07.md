@@ -9,7 +9,7 @@ places: [yubeng]
 
 Today’s hike is to Sacred Waterfall (神瀑). Early morning, about 6am, I woke up to catch the 日照金山, which translates to sunlight illuminating golden mountain. Unfortunately, we went to Yubeng during the rainy season, so there were a lot of clouds blocking the peak of the mountain.
 
-![](media/day-07/dog.webp "3 dogs accompanied me while I was walking down to Lower Yuebng.")
+![](media/day-07/dog.webp "3 dogs accompanied me while I was walking down to Lower Yubeng.")
 ![](media/day-07/painting.webp)
 
 ![](media/day-07/timelapse.mp4)
@@ -43,7 +43,7 @@ After breakfast, we slowly made our way to the start of the hike. The Sacred Wat
 
 ### The Sacred Waterfall
 
-![](media/day-07/view11-1.webp)
+![](media/day-07/view11.webp)
 ![](media/day-07/waterfall2.webp)
 ![](media/day-07/waterfall-vid.mp4)
 
@@ -58,6 +58,7 @@ It was late afternoon when we returned. We found a bistro that was recommended b
 
 ![](media/day-07/lunch.webp)
 ![](media/day-07/lunch2.webp)
+![](media/day-07/lunch3.webp)
 ![](media/day-07/mountain.webp "View from the restaurant")
 
 ![](media/day-07/view16.webp)
